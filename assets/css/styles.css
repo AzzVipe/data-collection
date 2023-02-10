@@ -1,0 +1,148 @@
+#app {
+	font-family: "Poppins" !important;
+}
+
+main {
+	display: flex;
+	min-height: 100vh;
+	/* flex-direction: column; */
+}
+
+.container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 3rem;
+	padding: 1rem;
+}
+
+/* Sign In & Sign Up page  */
+
+.p-tabmenu .p-tabmenu-nav,
+.p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
+	border: 0px !important;
+	margin: 0 !important;
+}
+
+.error-msg {
+	color: var(--red-700);
+}
+
+.p-card {
+	height: 100%;
+	padding: 1.25rem;
+}
+
+.p-card .p-card-body {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem !important;
+}
+
+.p-card .p-card-body .p-card-title {
+	font-size: 2rem;
+	letter-spacing: 1px;
+	line-height: 2.5rem;
+}
+
+.p-card .p-card-content {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+}
+
+.p-card .p-card-body .p-card-content .p-inputtext {
+	width: 100%;
+}
+
+.p-card .p-card-footer {
+	display: flex;
+	gap: 1rem;
+}
+
+.router-link {
+	font-weight: 500;
+	align-self: flex-start;
+}
+
+/* Admin & User Page */
+
+main .body {
+	padding: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+
+.table-container {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.navigation .p-menubar {
+	font-family: "Poppins" !important;
+	padding: 1rem;
+	border: 0;
+	border-radius: 0;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+	color: var(--primary-900);
+	background-color: var(--primary-50);
+	font-size: 1.2rem;
+}
+
+.navigation .p-menubar .p-menuitem .p-menuitem-content .p-menuitem-text {
+	color: var(--primary-900) !important;
+	text-transform: uppercase;
+	font-weight: 600;
+	letter-spacing: 1.5px;
+}
+
+.navigation .p-menubar-start h1 {
+	margin-right: 2rem;
+	margin-left: 1rem;
+	font-size: 1.5rem;
+	text-transform: uppercase;
+	font-weight: 700;
+	letter-spacing: 2px;
+}
+
+.navigation .p-menubar-end .profile-card {
+	display: flex;
+	align-items: center;
+	padding: 1rem;
+	gap: 1rem;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.navigation .p-menubar-end .profile-card:hover {
+	background-color: var(--primary-100);
+}
+
+.p-menuitem-active {
+	background-color: var(--primary-100) !important;
+}
+
+.profile-card .profile-card-text h1 {
+	font-size: 16px;
+	margin-bottom: 0.25rem;
+	font-weight: 500;
+}
+
+.profile-card .profile-card-text h2 {
+	font-size: 14px;
+	color: var(--primary-800);
+}
+
+.table-heading {
+	font-weight: 700;
+	font-size: 2.5rem;
+	text-align: center;
+}
+
+.buttons {
+	display: flex;
+	gap: 2rem;
+}

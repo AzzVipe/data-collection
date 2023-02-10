@@ -1,0 +1,84 @@
+{
+	"options": [
+		{
+			"field": "service",
+			"option": [
+				{ "name": "Service 1" },
+				{ "name": "Service 2" },
+				{ "name": "Service 3" }
+			]
+		},
+		{
+			"field": "customer",
+			"option": [
+				{ "name": "My manager" },
+				{ "name": "My self" },
+				{ "name": "My team" },
+				{ "name": "Peers" },
+				{ "name": "Leaders" },
+				{ "name": "Executive Staff" },
+				{ "name": "Functional Group" },
+				{ "name": "Company" },
+				{ "name": "General Employees" },
+				{ "name": "External Customer" },
+				{ "name": "Partner" },
+				{ "name": "Other" }
+			]
+		},
+		{
+			"field": "impact",
+			"option": [
+				{ "name": "Revenue Gen" },
+				{ "name": "Profitability" },
+				{ "name": "Customer Sat" },
+				{ "name": "Employee Sat" },
+				{ "name": "Risk Management" },
+				{ "name": "Other" }
+			]
+		},
+		{
+			"field": "skills",
+			"option": [
+				{ "name": "Core" },
+				{ "name": "Skilled" },
+				{ "name": "Expert" }
+			]
+		},
+		{
+			"field": "service_quality",
+			"option": [
+				{ "name": "The service is working well" },
+				{ "name": "The service needs improving" },
+				{
+					"name": "Environmental / team dynamics impacting service effectiveness"
+				},
+				{ "name": "Improvement is in process" },
+				{ "name": "I want to lead improving this service" },
+				{ "name": "This service could be automated / autsourced" },
+				{ "name": "Service not needed / not adding value" }
+			]
+		},
+		{
+			"field": "my_capability",
+			"option": [
+				{ "name": "I am fully capable and confident" },
+				{ "name": "This service offers me an opportunity to grow" },
+				{ "name": "This is a stretch for me; need additional support" },
+				{ "name": "My talent is NOT aligned with this service" },
+				{ "name": "There is another person I know, which is better suited" }
+			]
+		},
+		{
+			"field": "my_interest",
+			"option": [
+				{ "name": "Enjoy this service; would like to keep doing it" },
+				{ "name": "Enjoy this service; would like to do more of it" },
+				{ "name": "Dislike this service; would prefer not to do it" },
+				{ "name": "Been there done that; I am not learning or growing" },
+				{ "name": "Would like to train / mentor others to do this service" },
+				{ "name": "Specific project that is completed / no longer needed" },
+				{ "name": "Not doing this, but would like to in the future" }
+			]
+		}
+	]
+}
