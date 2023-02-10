@@ -70,7 +70,7 @@
 
 <template>
 	<section class="container">
-		<h1 class="table-heading">Past / Counting Stage</h1>
+		<h1 class="table-heading">Past / Continuing Stage</h1>
 		<div class="table">
 			<DataTable
 				:value="tableData"
