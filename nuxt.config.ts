@@ -14,7 +14,7 @@ export default defineNuxtConfig({
 
 	runtimeConfig: {
 		public: {
-			APP_ID: process.env.APP_ID_,
+			APP_ID: "application-0-ksuyw",
 		},
 	},
 
