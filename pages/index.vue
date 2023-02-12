@@ -1,43 +1,43 @@
 <template>
 	<main class="container">
-		<Card>
-			<template #title>
-				<h1 class="table-heading">Sign in</h1>
-			</template>
-			<template #content>
-				<span class="p-float-label">
-					<InputText
-						id="email"
-						type="email"
-						v-model="email"
-						placeholder="Email" />
-					<label for="email">Email</label>
-				</span>
-				<span class="p-float-label">
-					<InputText
-						id="password"
-						type="password"
-						v-model="password"
-						placeholder="Password" />
-					<label for="password">Password</label>
-				</span>
-				<p class="error-msg" v-if="errMsg">{{ errMsg }}</p>
-			</template>
-			<template #footer>
-				<Button @click="signIn" label="Sign In" class="w-full" />
-			</template>
-		</Card>
+		<div>
+			<Card>
+				<template #title>
+					<h1 class="table-heading">Sign in</h1>
+				</template>
+				<template #content>
+					<span class="p-float-label">
+						<InputText
+							id="email"
+							type="email"
+							v-model="email"
+							placeholder="Email" />
+						<label for="email">Email</label>
+					</span>
+					<span class="p-float-label">
+						<InputText
+							id="password"
+							type="password"
+							v-model="password"
+							placeholder="Password" />
+						<label for="password">Password</label>
+					</span>
+					<p class="error-msg" v-if="errMsg">{{ errMsg }}</p>
+				</template>
+				<template #footer>
+					<Button @click="signIn" label="Sign In" class="w-full" />
+				</template>
+			</Card>
+		</div>
 	</main>
 </template>
 
 <script setup>
-	import * as Realm from "realm-web";
 	const email = ref(null);
 	const password = ref(null);
 	const errMsg = ref(null);
 	const config = useRuntimeConfig();
-	// const data = useRealmApp();
-	let realmApp;
+	const { app: realmApp, Realm } = useMyRealmApp();
 
 	const signIn = async () => {
 		if (email.value === null || password.value === null) {
@@ -64,7 +64,8 @@
 			});
 	};
 
-	onBeforeMount(() => {
-		realmApp = new Realm.App({ id: config.APP_ID });
-	});
+	// onBeforeMount(() => {
+	// 	realmApp = new Realm.App({ id: config.APP_ID });
+	// 	console.log(realmApp);
+	// });
 </script>

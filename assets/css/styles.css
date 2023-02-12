@@ -1,7 +1,3 @@
-#app {
-	font-family: "Poppins" !important;
-}
-
 main {
 	display: flex;
 	min-height: 100vh;
@@ -12,8 +8,8 @@ main {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	gap: 3rem;
-	padding: 1rem;
+	min-height: 100vh;
+	/* overflow-y: scroll; */
 }
 
 /* Sign In & Sign Up page  */
@@ -136,13 +132,59 @@ main .body {
 	color: var(--primary-800);
 }
 
+.table-section {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 100%;
+}
+.table {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	height: 100%;
+	padding: 1rem;
+}
 .table-heading {
-	font-weight: 700;
+	font-family: "Poppins";
+	width: 100%;
+	display: flex;
+	align-items: center;
+	padding: 1rem;
+	gap: 3rem;
+}
+
+.table-heading-space-between {
+	justify-content: space-between;
+}
+
+.table-heading > h1 {
+	font-weight: 600;
 	font-size: 2.5rem;
-	text-align: center;
+}
+
+.table-heading-data {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	gap: 1rem;
+	/* width: 100%; */
+}
+
+.table-heading-data-items {
+	display: flex;
+	gap: 1rem;
+	font-size: 1.2rem;
+	font-weight: 500;
+}
+
+.table-heading-data-items-key {
+	/* font-size: ; */
 }
 
 .buttons {
 	display: flex;
 	gap: 2rem;
+	padding: 1rem;
+	/* width: 100%; */
 }

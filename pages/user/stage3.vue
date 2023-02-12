@@ -1,28 +1,26 @@
 <script setup>
-	import * as Realm from "realm-web";
 	import optData from "@/options.json";
 	const columns = ref([]);
 	const tableData = ref([]);
-	const config = useRuntimeConfig();
 	const options = optData.options;
-	let realmApp;
+	const { app: realmApp, Realm } = useMyRealmApp();
+	const isFetching = ref(true);
 
-	onBeforeMount(() => {
-		realmApp = Realm.getApp(config.APP_ID);
+	onBeforeMount(async () => {
 		const mongodb = realmApp.currentUser.mongoClient("mongodb-atlas");
 		const collection = mongodb.db("level-3").collection("table");
 		const tableConfig = mongodb.db("level-3").collection("table-config");
 
-		tableConfig.find().then((data) => {
+		await tableConfig.find().then((data) => {
 			columns.value = data;
 			console.log(columns.value);
 		});
-		console.log(realmApp.currentUser.id);
-		console.log(options);
 
-		collection.find().then((data) => {
+		await collection.find().then((data) => {
 			tableData.value = data;
 		});
+
+		isFetching.value = false;
 	});
 
 	const addRow = async () => {
@@ -43,70 +41,29 @@
 		tableData.value.push(temp);
 	};
 
-	const onCellEditComplete = async (event) => {
-		let { data, newValue, field } = event;
+	const onCellEdit = async (data) => {
 		const mongodb = realmApp.currentUser.mongoClient("mongodb-atlas");
 		const collection = mongodb.db("level-3").collection("table");
-		const col = columns.value.find((data) => data.field === field);
-		let temp;
-
-		if (col.type === "string") {
-			temp = newValue;
-		} else if (col.type === "dropdown") {
-			temp = newValue.name;
-		}
-
-		if (temp.trim().length > 0) {
-			data[field] = temp;
-			console.log(data);
-			collection.updateOne({ _id: data._id }, data);
-		} else event.preventDefault();
-	};
-
-	const findOptions = (fieldName) => {
-		return options.find((temp) => temp.field === fieldName).option;
+		collection.updateOne({ _id: data._id }, data);
 	};
 </script>
 
 <template>
-	<section class="container">
-		<h1 class="table-heading">New / Desired Stage</h1>
-		<div class="table">
-			<DataTable
-				:value="tableData"
-				editMode="cell"
-				showGridlines
-				responsiveLayout="scroll"
-				class="editable-cells-table"
-				@cell-edit-complete="onCellEditComplete"
-				v-if="tableData.length">
-				<!-- <Column field="id" header="ID" /> -->
-				<Column
-					v-for="col of columns"
-					:field="col.field"
-					:header="col.header"
-					:key="col.field"
-					style="width: 250px">
-					<template #editor="slotProps">
-						<Dropdown
-							v-if="col.type === 'dropdown'"
-							v-model="slotProps.data[slotProps.field]"
-							:options="findOptions(col.field)"
-							optionLabel="name"
-							placeholder="Select a Service" />
-						<InputText
-							v-else
-							v-model="slotProps.data[slotProps.field]"
-							style="border: 0px; padding: 0; width: 100%" />
-					</template>
-				</Column>
-			</DataTable>
+	<section class="table-section" v-if="!isFetching">
+		<div class="table-heading table-heading-space-between">
+			<h1>New / Desired Stage</h1>
+			<Button label="Log Out" @click="logout" />
 		</div>
+		<DataTableWrapper
+			@cell-edit="onCellEdit"
+			:data="tableData"
+			:columns="columns"
+			:options="options" />
 		<div class="buttons">
 			<Button
 				label="Previous Stage"
 				icon="pi pi-angle-double-left"
-				@click="navigateTo('/user/stage2')"></Button>
+				@click="navigateTo('/user/')"></Button>
 			<Button
 				v-if="tableData.length === 0"
 				label="Create Table"

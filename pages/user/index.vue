@@ -1,29 +1,44 @@
 <script setup>
-	import * as Realm from "realm-web";
 	import optData from "@/options.json";
-	const columns = ref([]);
-	const tableData = ref([]);
-	const config = useRuntimeConfig();
-	const options = optData.options;
-	let realmApp;
 
-	onBeforeMount(() => {
-		realmApp = Realm.getApp(config.APP_ID);
+	const columns = ref([]);
+	const columns2 = ref([]);
+	const tableData = ref([null]);
+	const tableData2 = ref([null]);
+	const options = optData.options;
+	const isFetching = ref(true);
+	const { app: realmApp, Realm } = useMyRealmApp();
+
+	onBeforeMount(async () => {
 		const mongodb = realmApp.currentUser.mongoClient("mongodb-atlas");
 		const collection = mongodb.db("level-1").collection("table");
 		const tableConfig = mongodb.db("level-1").collection("table-config");
+		const collection2 = mongodb.db("level-2").collection("table");
+		const tableConfig2 = mongodb.db("level-2").collection("table-config");
 
-		tableConfig.find().then((data) => {
+		await tableConfig.find().then((data) => {
 			columns.value = data;
-			console.log(columns.value);
 		});
-		console.log(realmApp.currentUser.id);
-		console.log(options);
 
-		collection.find().then((data) => {
+		await collection.find().then((data) => {
 			tableData.value = data;
 		});
+
+		await tableConfig2.find().then((data) => {
+			columns2.value = data;
+		});
+
+		await collection2.find().then((data) => {
+			tableData2.value = data;
+		});
+
+		isFetching.value = false;
 	});
+
+	const logout = () => {
+		realmApp.currentUser.logOut();
+		navigateTo("/");
+	};
 
 	const addRow = async () => {
 		const mongodb = realmApp.currentUser.mongoClient("mongodb-atlas");
@@ -43,76 +58,69 @@
 		tableData.value.push(temp);
 	};
 
-	const onCellEditComplete = async (event) => {
-		let { data, newValue, field } = event;
+	const onCellEdit = async (data) => {
 		const mongodb = realmApp.currentUser.mongoClient("mongodb-atlas");
 		const collection = mongodb.db("level-1").collection("table");
-		const col = columns.value.find((data) => data.field === field);
-		let temp;
-
-		if (col.type === "string") {
-			temp = newValue;
-		} else if (col.type === "dropdown") {
-			temp = newValue.name;
-		}
-
-		if (temp.trim().length > 0) {
-			data[field] = temp;
-			console.log(data);
-			collection.updateOne({ _id: data._id }, data);
-		} else event.preventDefault();
+		collection.updateOne({ _id: data._id }, data);
 	};
 
-	const findOptions = (fieldName) => {
-		return options.find((temp) => temp.field === fieldName).option;
+	const onCellEdit2 = async (data) => {
+		const mongodb = realmApp.currentUser.mongoClient("mongodb-atlas");
+		const collection = mongodb.db("level-2").collection("table");
+		collection.updateOne({ _id: data._id }, data);
+	};
+
+	const totalHoursLastThreeMonth = () => {
+		let total = 0;
+		tableData.value.forEach((item) => {
+			total += new Number(item.hours_last_3_months);
+		});
+		console.log(total);
+		return total;
 	};
 </script>
 
 <template>
-	<section class="container">
-		<h1 class="table-heading">Past / Continuing Stage</h1>
-		<div class="table">
-			<DataTable
-				:value="tableData"
-				editMode="cell"
-				showGridlines
-				responsiveLayout="scroll"
-				class="editable-cells-table"
-				@cell-edit-complete="onCellEditComplete"
-				v-if="tableData.length">
-				<!-- <Column field="id" header="ID" /> -->
-				<Column
-					v-for="col of columns"
-					:field="col.field"
-					:header="col.header"
-					:key="col.field"
-					style="width: 250px">
-					<template #editor="slotProps">
-						<Dropdown
-							v-if="col.type === 'dropdown'"
-							v-model="slotProps.data[slotProps.field]"
-							:options="findOptions(col.field)"
-							optionLabel="name"
-							placeholder="Select a Service" />
-						<InputText
-							v-else
-							v-model="slotProps.data[slotProps.field]"
-							style="border: 0px; padding: 0; width: 100%" />
-					</template>
-				</Column>
-			</DataTable>
+	<section class="table-section" v-if="!isFetching">
+		<div class="table-heading">
+			<h1>Past / Continuing Stage</h1>
+			<div class="table-heading-data">
+				<div class="table-heading-data-items">
+					<h1 class="table-heading-data-items-key">
+						Total hours worked last three month:
+					</h1>
+					<h1>{{ totalHoursLastThreeMonth() }} Hours</h1>
+				</div>
+				<!-- <div class="table-heading-data-items">
+					<h1>Total hours worked last three month:</h1>
+					<h1>Total hours worked last three month:</h1>
+				</div> -->
+			</div>
+			<Button label="Log Out" @click="logout" />
 		</div>
+		<DataTableWrapper
+			@cell-edit="onCellEdit"
+			:data="tableData"
+			:columns="columns"
+			:options="options" />
+		<div class="buttons">
+			<Button label="Add Row" icon="pi pi-plus" @click="addRow()" />
+		</div>
+		<div class="table-heading">
+			<h1>New / Planned Stage</h1>
+		</div>
+		<DataTableWrapper
+			@cell-edit="onCellEdit2"
+			:data="tableData2"
+			:columns="columns2"
+			:options="options" />
 		<div class="buttons">
 			<Button label="Previous Stage" disabled icon="pi pi-angle-double-left" />
-			<Button
-				v-if="tableData.length === 0"
-				label="Create Table"
-				icon="pi pi-plus"
-				@click="addRow()" />
-			<Button v-else label="Add Row" icon="pi pi-plus" @click="addRow()" />
+			<!-- <Button label="Create Table" icon="pi pi-plus" @click="addRow()" /> -->
+			<Button label="Add Row" icon="pi pi-plus" @click="addRow()" />
 			<Button
 				label="Next Stage"
-				@click="navigateTo('/user/stage2')"
+				@click="navigateTo('/user/stage3')"
 				iconPos="right"
 				icon="pi pi-angle-double-right"></Button>
 		</div>
@@ -152,10 +160,5 @@
 
 	.p-editable-column .p-inputtext:enabled:focus {
 		box-shadow: none;
-	}
-
-	.table {
-		display: flex;
-		gap: 1rem;
 	}
 </style>

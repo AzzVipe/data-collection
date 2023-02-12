@@ -5,7 +5,6 @@ export default defineNuxtConfig({
 		"primevue/resources/themes/md-light-deeppurple/theme.css",
 		"primevue/resources/primevue.css",
 		"primeicons/primeicons.css",
-		"primeflex/primeflex.css",
 		"@/assets/css/styles.css",
 	],
 	build: {
@@ -18,5 +17,18 @@ export default defineNuxtConfig({
 		},
 	},
 
-	// modules: ["@nuxtjs/tailwindcss"],
+	app: {
+		head: {
+			meta: [
+				{ name: "viewport", content: "width=device-width, initial-scale=1" },
+			],
+			title: "Data Collection",
+			link: [
+				{
+					href: "https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap",
+					rel: "stylesheet",
+				},
+			],
+		},
+	},
 });

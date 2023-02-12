@@ -1,14 +1,11 @@
 <script setup>
-	import * as Realm from "realm-web";
 	import optData from "@/options.json";
 	const columns = ref([]);
 	const tableData = ref([]);
-	const config = useRuntimeConfig();
 	const options = optData.options;
-	let realmApp;
+	const { app: realmApp, Realm } = useMyRealmApp();
 
 	onBeforeMount(() => {
-		realmApp = Realm.getApp(config.APP_ID);
 		const mongodb = realmApp.currentUser.mongoClient("mongodb-atlas");
 		const collection = mongodb.db("level-2").collection("table");
 		const tableConfig = mongodb.db("level-2").collection("table-config");
@@ -70,38 +67,11 @@
 
 <template>
 	<section class="container">
-		<h1 class="table-heading">New / Planned Stage</h1>
-		<div class="table">
-			<DataTable
-				:value="tableData"
-				editMode="cell"
-				showGridlines
-				responsiveLayout="scroll"
-				class="editable-cells-table"
-				@cell-edit-complete="onCellEditComplete"
-				v-if="tableData.length">
-				<!-- <Column field="id" header="ID" /> -->
-				<Column
-					v-for="col of columns"
-					:field="col.field"
-					:header="col.header"
-					:key="col.field"
-					style="width: 250px">
-					<template #editor="slotProps">
-						<Dropdown
-							v-if="col.type === 'dropdown'"
-							v-model="slotProps.data[slotProps.field]"
-							:options="findOptions(col.field)"
-							optionLabel="name"
-							placeholder="Select a Service" />
-						<InputText
-							v-else
-							v-model="slotProps.data[slotProps.field]"
-							style="border: 0px; padding: 0; width: 100%" />
-					</template>
-				</Column>
-			</DataTable>
+		<div class="table-heading">
+			<h1>New / Planned Stage</h1>
+			<Button label="Log Out" @click="logout" />
 		</div>
+		<DataTableWrapper :data="tableData" :columns="columns" />
 		<div class="buttons">
 			<Button
 				label="Previous Stage"
