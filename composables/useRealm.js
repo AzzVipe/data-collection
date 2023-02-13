@@ -1,7 +1,8 @@
 import * as Realm from "realm-web";
 
 export const useMyRealmApp = () => {
-	const appId = import.meta.env.VITE_REALM_APP_ID;
+	const config = useRuntimeConfig();
+	const appId = config.public.APP_ID;
 
 	const app = new Realm.App({
 		id: appId,
