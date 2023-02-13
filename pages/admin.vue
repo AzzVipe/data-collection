@@ -104,145 +104,72 @@
 			</div>
 		</nav>
 
-		<div class="mt-14 container-height">
-			<h1 class="text-2xl p-4 font-bold uppercase">Past / Continuing Stage</h1>
-			<CustomTable
-				:key="componentKey"
-				:config="graphqlConfig"
-				@re-render="reRender" />
-			<h1 class="text-2xl p-4 font-bold uppercase">New / Planned Stage</h1>
-			<CustomTable
-				:key="componentKey"
-				:config="graphqlConfig2"
-				@re-render="reRender" />
+		<aside
+			id="logo-sidebar"
+			class="fixed shadow dark:shadow-slate-700 top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-600"
+			aria-label="Sidebar">
+			<div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
+				<ul class="space-y-2">
+					<li>
+						<NuxtLink
+							to="/admin/"
+							class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+							<i
+								class="ri-dashboard-fill text-xl w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
+							<span class="ml-3">Dashboard</span>
+						</NuxtLink>
+					</li>
+
+					<li>
+						<NuxtLink
+							href="#"
+							class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+							<i
+								class="ri-mail-fill text-xl w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
+
+							<span class="flex-1 ml-3 whitespace-nowrap">Inbox</span>
+							<span
+								class="inline-flex items-center justify-center w-3 h-3 p-3 ml-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300"
+								>3</span
+							>
+						</NuxtLink>
+					</li>
+					<li>
+						<NuxtLink
+							to="/admin/test"
+							href="#"
+							class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+							<i
+								class="ri-user-3-fill text-xl w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
+							<span class="flex-1 ml-3 whitespace-nowrap">Users</span>
+						</NuxtLink>
+					</li>
+				</ul>
+			</div>
+		</aside>
+
+		<div class="sm:ml-64 mt-14 container-height">
+			<NuxtPage />
 		</div>
-		<button
-			id="theme-toggle"
-			type="button"
-			class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
-			<i
-				id="theme-toggle-dark-icon"
-				class="hidden w-5 h-5 ri-moon-fill"
-				fill="currentColor"></i>
-			<i
-				id="theme-toggle-light-icon"
-				class="ri-moon-line hidden w-5 h-5"
-				fill="currentColor"></i>
-		</button>
 	</div>
 </template>
 
 <script setup>
-	const componentKey = ref(1);
-	const graphqlConfig = ref({
-		tableName: "level-1",
-		query: "level1s",
-		insert: "insertOneLevel1",
-		replace: "replaceOneLevel1",
-		delete: "deleteOneLevel1",
-		graphql: "",
+	import {
+		initDrawers,
+		initDropdowns,
+		initModals,
+		initPopovers,
+		initTooltips,
+	} from "flowbite";
+
+	onMounted(() => {
+		initDrawers();
+		initDropdowns();
+		initModals();
+		initPopovers();
+		initTooltips();
 	});
-	const graphqlConfig2 = ref({
-		tableName: "level-2",
-		query: "level2s",
-		insert: "insertOneLevel2",
-		replace: "replaceOneLevel2",
-		delete: "deleteOneLevel2",
-		graphql: "",
-	});
-
-	const graphql = JSON.stringify({
-		query: `query {
-				${graphqlConfig.value.query} {
-					_id
-					comments
-					customer
-					hours_last_3_months
-					hours_next_3_months
-					impact
-					my_capability
-					my_interest
-					service
-					service_quality
-					skills
-	         user_id
-				}
-			}`,
-		variables: {},
-	});
-
-	const graphql2 = JSON.stringify({
-		query: `query {
-				${graphqlConfig2.value.query} {
-					_id
-					comments
-					customer
-					hours_next_3_months
-					impact
-					my_capability
-					my_interest
-					service
-					service_quality
-					skills
-	        user_id
-				}
-			}`,
-		variables: {},
-	});
-
-	onBeforeMount(async () => {
-		graphqlConfig.value.graphql = graphql;
-		graphqlConfig2.value.graphql = graphql2;
-	});
-
-	const reRender = () => {
-		componentKey.value++;
-	};
-	onMounted(async () => {
-		toggleDarkMode();
-	});
-
-	const toggleDarkMode = () => {
-		let themeToggleDarkIcon = document.getElementById("theme-toggle-dark-icon");
-		let themeToggleLightIcon = document.getElementById(
-			"theme-toggle-light-icon"
-		);
-
-		if (
-			localStorage.getItem("color-theme") === "dark" ||
-			(!("color-theme" in localStorage) &&
-				window.matchMedia("(prefers-color-scheme: dark)").matches)
-		) {
-			themeToggleLightIcon.classList.remove("hidden");
-		} else {
-			themeToggleDarkIcon.classList.remove("hidden");
-		}
-
-		let themeToggleBtn = document.getElementById("theme-toggle");
-
-		themeToggleBtn.addEventListener("click", function () {
-			themeToggleDarkIcon.classList.toggle("hidden");
-			themeToggleLightIcon.classList.toggle("hidden");
-
-			if (localStorage.getItem("color-theme")) {
-				if (localStorage.getItem("color-theme") === "light") {
-					document.documentElement.classList.add("dark");
-					localStorage.setItem("color-theme", "dark");
-				} else {
-					document.documentElement.classList.remove("dark");
-					localStorage.setItem("color-theme", "light");
-				}
-			} else {
-				if (document.documentElement.classList.contains("dark")) {
-					document.documentElement.classList.remove("dark");
-					localStorage.setItem("color-theme", "light");
-				} else {
-					document.documentElement.classList.add("dark");
-					localStorage.setItem("color-theme", "dark");
-				}
-			}
-		});
-	};
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>

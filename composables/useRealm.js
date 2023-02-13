@@ -7,14 +7,7 @@ export const useMyRealmApp = () => {
 		id: appId,
 	});
 
-	const logout = () => {
-		app.currentUser.logOut();
-	};
-	// const printHello = "hey";
-	// const printHello = () => {
-	// 	console.log("hello world");
-	// };
+	const currentUser = app.currentUser;
 
-	// return { app, appId, printHello };
-	return { app, Realm, logout };
+	return { app, Realm, currentUser };
 };

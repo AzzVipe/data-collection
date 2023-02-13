@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+	.max-w-60 {
+		max-width: 60px;
+	}
+
+	.container-height {
+		height: calc(100vh - 3.5rem);
+	}
+
+	.container-height-2 {
+		height: calc(100vh - 8.7rem);
+	}
+}

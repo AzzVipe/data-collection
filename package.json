@@ -1,19 +1,23 @@
 {
-  "private": true,
-  "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
-  },
-  "devDependencies": {
-    "nuxt": "^3.1.2"
-  },
-  "dependencies": {
-    "primeflex": "^3.3.0",
-    "primeicons": "^6.0.1",
-    "primevue": "^3.23.0",
-    "realm-web": "^2.0.0"
-  }
+	"private": true,
+	"scripts": {
+		"build": "nuxt build",
+		"dev": "nuxt dev",
+		"generate": "nuxt generate",
+		"preview": "nuxt preview",
+		"postinstall": "nuxt prepare"
+	},
+	"devDependencies": {
+		"@nuxtjs/tailwindcss": "^6.4.0",
+		"nuxt": "^3.1.2"
+	},
+	"dependencies": {
+		"flowbite": "^1.6.3",
+		"primeicons": "^6.0.1",
+		"primevue": "^3.23.0",
+		"realm-web": "^2.0.0"
+	},
+	"overrides": {
+		"vue": "latest"
+	}
 }

@@ -3,14 +3,14 @@ main {
 	min-height: 100vh;
 	/* flex-direction: column; */
 }
-
+/* 
 .container {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	min-height: 100vh;
-	/* overflow-y: scroll; */
-}
+	overflow-y: scroll;
+} */
 
 /* Sign In & Sign Up page  */
 
