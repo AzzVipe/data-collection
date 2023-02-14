@@ -1,11 +1,13 @@
 <template>
-	<div class="flex flex-col w-full justify-center items-center p-4 gap-4">
-		<div class="overflow-x-auto shadow-md sm:rounded-lg">
+	<div
+		v-if="(tableData !== null && tableData === 0) || tableData"
+		class="flex flex-col w-full justify-center items-center p-4 gap-4">
+		<div class="overflow-x-auto lg:w-full shadow-md sm:rounded-lg">
 			<table
-				class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
-				v-if="tableData">
+				v-if="tableData"
+				class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
 				<thead
-					class="text-sm font-semibold text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+					class="text-sm font-semibold text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
 					<tr>
 						<th
 							v-for="col in columns"
@@ -21,11 +23,11 @@
 					<tr
 						class="bg-white border-b dark:bg-gray-800 dark:border-white"
 						v-for="(data, index) of tableData"
-						:key="data._id">
+						:key="data">
 						<td v-for="col in columns" :key="col.id" class="p-2">
 							<p
 								v-if="!isCurrentItem(data._id) || toggle === false"
-								class="overflow-x-scroll px-4 h-6 min-w-[100px]">
+								class="overflow-y-scroll px-4 h-6">
 								{{ data[col.field] }}
 							</p>
 							<div v-else>
@@ -37,12 +39,12 @@
 								<input
 									v-else-if="col.type === 'string' && col.field !== 'comments'"
 									type="text"
-									class="dark:bg-slate-400 bg-slate-300 text-slate-900 w-40 overflow-x-scroll px-4 py-2.5 rounded-lg"
+									class="dark:bg-slate-400 bg-slate-300 text-slate-900 w-32 overflow-x-scroll px-4 py-2.5 rounded-lg"
 									v-model="data[col.field]" />
 								<input
 									v-else
 									type="text"
-									class="dark:bg-slate-400 bg-slate-300 text-slate-900 overflow-x-scroll px-4 py-2.5 rounded-lg"
+									class="dark:bg-slate-400 w-44 bg-slate-300 text-slate-900 overflow-x-scroll px-4 py-2.5 rounded-lg"
 									v-model="data[col.field]" />
 							</div>
 						</td>
@@ -154,7 +156,7 @@
 	import graphqlOperation from "@/utils/graphql";
 	import { initModals } from "flowbite";
 
-	const { config } = defineProps(["config"]);
+	const { config, tempData } = defineProps(["config", "tempData"]);
 	const toggle = ref(false);
 	const tableData = ref(null);
 	const columns = ref();
@@ -182,9 +184,12 @@
 			columns.value = data.tableConfig.config;
 		});
 		await graphqlOperation(config.graphql).then((data) => {
-			if (data === null) tableData.value = null;
-			else tableData.value = data[config.query];
+			if (data === null) {
+				tableData.value = 0;
+				console.log(tableData.value);
+			} else tableData.value = data[config.query];
 		});
+
 		console.log(tableData.value);
 
 		initModals();
@@ -216,17 +221,16 @@
 
 	const addRow = async () => {
 		let jsonObj = {};
+		jsonObj["user_id"] = currentUser.id;
 		columns.value.forEach((element) => {
 			jsonObj[element.field] = " ";
 		});
-		jsonObj["user_id"] = currentUser.id;
 		const jsonText = JSON.stringify(jsonObj);
 		const unquotedText = jsonText.replace(/"([^"]+)":/g, "$1:");
 		console.log(unquotedText);
 		const graphql = JSON.stringify({
 			query: `mutation {
-	      ${config.insert} (
-	        data: ${unquotedText}) {
+	      ${config.insert} ( data: ${unquotedText}) {
 	        _id
 	      }
 	    }`,
@@ -272,6 +276,7 @@
 		console.log("updated");
 		currentItem.value = 0;
 		tableDocCopy.value = null;
+		// emit("reRender");
 	};
 
 	const dropEdit = (updatedVal, index, field) => {

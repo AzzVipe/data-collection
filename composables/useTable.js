@@ -1,7 +1,7 @@
 import graphqlOperation from "@/utils/graphql";
 
 export const useMyTableData = async () => {
-	let td;
+	let tempData = ref();
 	let graphql = JSON.stringify({
 		query: `query {
 			tableConfig(query: {name: "level-1"}) {
@@ -17,8 +17,9 @@ export const useMyTableData = async () => {
 	});
 
 	await graphqlOperation(graphql).then((data) => {
-		td = data;
+		tempData.value = data.tableConfig.config;
 	});
 
-	return { td };
+	console.log(tempData.value);
+	return tempData.value;
 };

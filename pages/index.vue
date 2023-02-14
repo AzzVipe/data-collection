@@ -109,7 +109,15 @@
 			.then((user) => {
 				console.log(user);
 				realmApp.currentUser.refreshCustomData();
-				navigateTo("/user");
+				realmApp.currentUser.callFunction("is_admin").then((data) => {
+					if (data === true) {
+						localStorage.setItem("isAdmin", true);
+						navigateTo("/admin");
+					} else {
+						localStorage.setItem("isAdmin", false);
+						navigateTo("/user");
+					}
+				});
 			})
 			.catch((err) => {
 				errMsg.value = "* Invalid username/password";

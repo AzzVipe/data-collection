@@ -11,7 +11,23 @@
 		height: calc(100vh - 3.5rem);
 	}
 
+	.min-container-height {
+		min-height: calc(100vh - 3.5rem);
+	}
+
 	.container-height-2 {
-		height: calc(100vh - 8.7rem);
+		min-height: calc(100vh - 8.7rem);
+	}
+
+	.bg-gradient {
+		@apply bg-slate-800;
+	}
+	.bg-gradient2 {
+		@apply bg-gray-900;
+		/* background: linear-gradient(
+			109.6deg,
+			rgb(20, 30, 48) 11.2%,
+			rgb(36, 59, 85) 91.1%
+		); */
 	}
 }

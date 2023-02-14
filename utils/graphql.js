@@ -1,32 +1,30 @@
+import axios from "axios";
+
 const { app: realmApp } = useMyRealmApp();
 
 export default async function graphqlOperation(graphql) {
-	let myHeaders = new Headers();
-	let resData;
-
-	myHeaders.append(
-		"Authorization",
-		`Bearer ${realmApp.currentUser._accessToken}`
-	);
-	myHeaders.append("Content-Type", "application/json");
+	let resData = null;
 
 	let requestOptions = {
-		method: "POST",
-		headers: myHeaders,
-		body: graphql,
-		redirect: "follow",
+		method: "post",
+		maxBodyLength: Infinity,
+		url: "https://eu-west-1.aws.realm.mongodb.com/api/client/v2.0/app/application-0-ksuyw/graphql",
+		headers: {
+			Authorization: `Bearer ${realmApp.currentUser._accessToken}`,
+			"Content-Type": "application/json",
+		},
+		data: graphql,
 	};
-
-	await fetch(
-		"https://eu-west-1.aws.realm.mongodb.com/api/client/v2.0/app/application-0-ksuyw/graphql",
-		requestOptions
-	)
-		.then((response) => response.json())
+	await axios(requestOptions)
+		.then((response) => response.data)
 		.then((result) => {
 			resData = result.data;
-			console.log(resData);
+			// console.log(resData);
 		})
-		.catch((error) => console.log("error", error));
+		.catch((error) => {
+			resData = null;
+			console.log("error", error.response);
+		});
 
 	return resData;
 }
