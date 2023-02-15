@@ -1,13 +1,10 @@
 <template>
-	<div
-		v-if="(tableData !== null && tableData === 0) || tableData"
-		class="flex flex-col justify-center p-4 gap-4">
-		<div class="overflow-x-auto lg:w-full shadow-md sm:rounded-lg">
+	<div class="flex flex-col justify-start p-4 gap-4">
+		<div class="overflow-x-auto rounded-lg" v-if="tableData.length !== 0">
 			<table
-				v-if="tableData"
-				class="text-sm text-left text-gray-500 dark:text-gray-400">
+				class="w-full text-sm text-left text-gray-500 dark:text-gray-400 shadow-md">
 				<thead
-					class="text-sm font-bold text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-200 tracking-wider">
+					class="text-sm font-bold text-gray-700 uppercase bg-slate-200 dark:bg-gray-700 dark:text-gray-200 tracking-wider">
 					<tr>
 						<th
 							v-for="col in columns"
@@ -145,6 +142,14 @@
 			</table>
 		</div>
 		<button
+			v-if="tableData.length === 0"
+			@click="addRow"
+			type="button"
+			class="text-white self-start bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+			Create new table
+		</button>
+		<button
+			v-else
 			@click="addRow"
 			type="button"
 			class="text-white self-start bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
@@ -154,18 +159,17 @@
 </template>
 
 <script setup>
-	import graphqlOperation from "@/utils/graphql";
 	import { initModals } from "flowbite";
 
-	const { config, tempData } = defineProps(["config", "tempData"]);
+	const { config, tableData } = defineProps(["config", "tableData"]);
 	const toggle = ref(false);
-	const tableData = ref(null);
 	const columns = ref();
 	const tableDocCopy = ref();
 	const currentItem = ref(null);
-	const { app: realmApp } = useMyRealmApp();
+	const { app: realmApp, currentUser, graphqlOperation } = useMyRealmApp();
 
 	const emit = defineEmits(["reRender"]);
+	toRefs(tableData);
 
 	onMounted(async () => {
 		let graphql = JSON.stringify({
@@ -181,17 +185,10 @@
 			}`,
 			variables: {},
 		});
+
 		await graphqlOperation(graphql).then((data) => {
 			columns.value = data.tableConfig.config;
 		});
-		await graphqlOperation(config.graphql).then((data) => {
-			if (data === null) {
-				tableData.value = 0;
-				console.log(tableData.value);
-			} else tableData.value = data[config.query];
-		});
-
-		console.log(tableData.value);
 
 		initModals();
 	});
@@ -204,7 +201,7 @@
 	const setCurrentItem = async (data) => {
 		if (currentItem.value !== 0 && currentItem.value !== null) {
 			await updateRow(
-				tableData.value.find((temp) => temp._id === tableDocCopy.value._id)
+				tableData.find((temp) => temp._id === tableDocCopy.value._id)
 			);
 		}
 		currentItem.value = data._id;
@@ -228,7 +225,6 @@
 		});
 		const jsonText = JSON.stringify(jsonObj);
 		const unquotedText = jsonText.replace(/"([^"]+)":/g, "$1:");
-		console.log(unquotedText);
 		const graphql = JSON.stringify({
 			query: `mutation {
 	      ${config.insert} ( data: ${unquotedText}) {
@@ -242,7 +238,8 @@
 			console.log(jsonObj["_id"]);
 			// console.log(data[config.insert]);
 		});
-		tableData.value.push(jsonObj);
+		tableData.push(jsonObj);
+		emit("reRender");
 	};
 
 	const updateRow = async (data) => {
@@ -281,7 +278,7 @@
 	};
 
 	const dropEdit = (updatedVal, index, field) => {
-		tableData.value[index][field] = updatedVal;
+		tableData[index][field] = updatedVal;
 	};
 
 	const cancelRowEdit = async (data) => {
@@ -291,19 +288,21 @@
 			tableDocCopy.value = null;
 			return;
 		}
-		data = tableDocCopy.value;
+
+		let index;
+		for (index = 0; index < tableData.length; index++) {
+			if (tableData[index]._id === data._id) break;
+		}
+		if (index <= tableData.length) tableData[index] = tableDocCopy.value;
 		console.log(data);
 		currentItem.value = 0;
 		tableDocCopy.value = null;
-		emit("reRender");
 	};
 
 	const deleteRow = async (id) => {
 		const graphql = JSON.stringify({
 			query: `mutation {
-	      ${config.delete} (
-	        query: { _id: "${id}"})
-	       {
+	      ${config.delete} (query: { _id: "${id}"}) {
 	        _id
 	      }
 	    }`,
@@ -313,7 +312,16 @@
 			console.log(data);
 		});
 
-		tableData.value = tableData.value.filter((temp) => temp._id !== id);
+		let index;
+
+		for (index = 0; index < tableData.length; index++) {
+			if (tableData[index]._id === id) break;
+		}
+
+		if (index <= tableData.length) {
+			if (tableData.length > 1) tableData.splice(index, index);
+			else tableData.pop();
+		}
 	};
 </script>
 

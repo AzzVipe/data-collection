@@ -1,28 +1,50 @@
 <template>
 	<div>
 		<div class="mt-14 p-4">
-			<h1
-				class="text-black dark:text-white text-2xl p-4 font-bold uppercase mt-4">
-				Past / Continuing Stage
-			</h1>
-			<CustomTable
-				:key="componentKey"
-				:config="graphqlConfig"
-				@re-render="reRender" />
-			<h1 class="text-black dark:text-white text-2xl p-4 font-bold uppercase">
-				New / Planned Stage
-			</h1>
-			<CustomTable
-				:key="componentKey"
-				:config="graphqlConfig2"
-				@re-render="reRender" />
-			<!-- <h1 class="text-black dark:text-white text-2xl p-4 font-bold uppercase">
-				New / Planned Stage
-			</h1>
-			<CustomTable
-				:key="componentKey"
-				:config="graphqlConfig3"
-				@re-render="reRender" /> -->
+			<div class="mt-4">
+				<div
+					class="md:flex items-center p-4 justify-between gap-4 text-black dark:text-white">
+					<h1 class="text-2xl font-bold uppercase">Past / Continuing Stage</h1>
+					<div class="xl:flex gap-4 uppercase">
+						<p>Total hours last 3 Months: {{ totalHourLevel1last }} Hours</p>
+						<p>Total hours next 3 Months: {{ totalHourLevel1next }} Hours</p>
+					</div>
+				</div>
+
+				<CustomTable
+					v-if="level1 !== null"
+					:key="componentKey"
+					:config="graphqlConfig"
+					:tableData="level1"
+					@re-render="reRender" />
+			</div>
+
+			<div>
+				<div
+					class="flex items-center p-4 justify-between gap-4 text-black dark:text-white">
+					<h1 class="text-2xl font-bold uppercase">New / Planned Stage</h1>
+					<div class="flex gap-4 uppercase">
+						<p>Total hours next 3 Months: {{ totalHourLevel2next }} Hours</p>
+					</div>
+				</div>
+				<CustomTable
+					v-if="level2 !== null"
+					:key="componentKey"
+					:tableData="level2"
+					:config="graphqlConfig2"
+					@re-render="reRender" />
+			</div>
+			<div>
+				<h1 class="text-black dark:text-white text-2xl p-4 font-bold uppercase">
+					New / Desired Stage
+				</h1>
+				<CustomTable
+					v-if="level3 !== null"
+					:tableData="level3"
+					:key="componentKey"
+					:config="graphqlConfig3"
+					@re-render="reRender" />
+			</div>
 		</div>
 	</div>
 </template>
@@ -30,7 +52,34 @@
 <script setup>
 	import { initDropdowns } from "flowbite";
 	const componentKey = ref(1);
-	const { app: realmApp } = useMyRealmApp();
+	const level1 = ref(null);
+	const totalHourLevel1last = ref(0);
+	const totalHourLevel1next = ref(0);
+	const totalHourLevel2next = ref(0);
+	const level2 = ref(null);
+	const level3 = ref(null);
+	const { fetchlevel1, fetchlevel2, fetchlevel3 } = useMyRealmApp();
+
+	await fetchlevel1().then((data) => {
+		level1.value = data.level1s;
+	});
+
+	await fetchlevel2().then((data) => {
+		level2.value = data.level2s;
+	});
+
+	await fetchlevel3().then((data) => {
+		level3.value = data.level3s;
+	});
+
+	level1.value.forEach((data) => {
+		totalHourLevel1last.value += new Number(data.hours_last_3_months);
+		totalHourLevel1next.value += new Number(data.hours_next_3_months);
+	});
+
+	level2.value.forEach((data) => {
+		totalHourLevel2next.value += new Number(data.hours_next_3_months);
+	});
 
 	const graphqlConfig = ref({
 		tableName: "level-1",
@@ -123,6 +172,22 @@
 
 	onMounted(() => {
 		initDropdowns();
+	});
+
+	watch(level1.value, (newVal, oldVal) => {
+		totalHourLevel1last.value = 0;
+		totalHourLevel1next.value = 0;
+		level1.value.forEach((data) => {
+			totalHourLevel1last.value += new Number(data.hours_last_3_months);
+			totalHourLevel1next.value += new Number(data.hours_next_3_months);
+		});
+	});
+
+	watch(level2.value, (newVal, oldVal) => {
+		totalHourLevel2next.value = 0;
+		level2.value.forEach((data) => {
+			totalHourLevel2next.value += new Number(data.hours_next_3_months);
+		});
 	});
 </script>
 

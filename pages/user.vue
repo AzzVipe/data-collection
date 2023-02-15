@@ -19,31 +19,9 @@
 		initTooltips,
 	} from "flowbite";
 
-	definePageMeta({
-		validate: async (route) => {
-			const { getCurrentUser } = useMyRealmApp();
-			let flag;
-
-			await getCurrentUser().then((currentUser) => {
-				console.log(currentUser);
-				if (currentUser === null) flag = false;
-				else flag = true;
-				console.log(flag);
-			});
-			console.log(flag);
-
-			return flag;
-		},
-	});
-
-	const { fetchUsers, app: realmApp } = useMyRealmApp();
-	const users = ref();
+	const { app: realmApp } = useMyRealmApp();
 
 	onMounted(() => {
-		fetchUsers().then((data) => {
-			users.value = data;
-			console.log(data);
-		});
 		initDrawers();
 		initDropdowns();
 		initModals();
@@ -54,7 +32,7 @@
 	const signOut = () => {
 		realmApp.currentUser.logOut();
 		localStorage.clear();
-		navigateTo("");
+		navigateTo("/");
 	};
 </script>
 

@@ -8,9 +8,10 @@ export const useMyRealmApp = () => {
 	let app = new Realm.App({
 		id: appId,
 	});
+	const currentUser = app.currentUser;
 
 	const getApp = () => {
-		return Realm.getApp(appId);
+		app = Realm.getApp(appId);
 	};
 
 	const getCurrentUser = () => {
@@ -38,7 +39,6 @@ export const useMyRealmApp = () => {
 			.then((response) => response.data)
 			.then((result) => {
 				resData = result.data;
-				console.log(resData);
 			})
 			.catch((error) => {
 				resData = null;
@@ -81,5 +81,96 @@ export const useMyRealmApp = () => {
 		return temp;
 	}
 
-	return { app, Realm, fetchUsers, getApp, getCurrentUser };
+	async function fetchlevel3() {
+		let temp;
+		const graphql = JSON.stringify({
+			query: `query {
+				level3s {
+					_id
+					comments
+					my_capability
+					my_interest
+					service 
+				}
+			}`,
+			variables: {},
+		});
+
+		await graphqlOperation(graphql).then((data) => {
+			temp = data;
+			console.log(temp);
+		});
+
+		return temp;
+	}
+
+	async function fetchlevel2() {
+		let temp;
+		const graphql = JSON.stringify({
+			query: `query {
+				level2s {
+					_id
+					comments
+					customer
+					hours_next_3_months
+					impact
+					my_capability
+					my_interest
+					service
+					service_quality
+					skills
+	        user_id
+				}
+			}`,
+			variables: {},
+		});
+
+		await graphqlOperation(graphql).then((data) => {
+			temp = data;
+		});
+
+		return temp;
+	}
+
+	async function fetchlevel1() {
+		let temp;
+		const graphql = JSON.stringify({
+			query: `query {
+				level1s {
+					_id
+					comments
+					customer
+					hours_last_3_months
+					hours_next_3_months
+					impact
+					my_capability
+					my_interest
+					service
+					service_quality
+					skills
+	        user_id
+				}
+			}`,
+			variables: {},
+		});
+
+		await graphqlOperation(graphql).then((data) => {
+			temp = data;
+		});
+
+		return temp;
+	}
+
+	return {
+		app,
+		Realm,
+		fetchUsers,
+		getApp,
+		getCurrentUser,
+		fetchlevel1,
+		fetchlevel2,
+		fetchlevel3,
+		currentUser,
+		graphqlOperation,
+	};
 };

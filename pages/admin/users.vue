@@ -47,7 +47,6 @@
 </template>
 
 <script setup>
-	import graphqlOperation from "@/utils/graphql";
 	import {
 		initDrawers,
 		initDropdowns,

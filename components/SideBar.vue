@@ -63,9 +63,6 @@
 
 <script setup>
 	const isAdmin = localStorage.getItem("isAdmin");
-	onMounted(() => {
-		console.log(isAdmin);
-	});
 </script>
 
 <style lang="scss" scoped></style>

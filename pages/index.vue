@@ -118,7 +118,7 @@
 						navigateTo("/user");
 					}
 				});
-				localStorage.setItem("isLoggedIn", true);
+				// localStorage.setItem("isLoggedIn", true);
 			})
 			.catch((err) => {
 				errMsg.value = "* Invalid username/password";

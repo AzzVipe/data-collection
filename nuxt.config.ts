@@ -2,9 +2,6 @@
 export default defineNuxtConfig({
 	css: [
 		"@/assets/css/resets.css",
-		"primevue/resources/themes/md-light-deeppurple/theme.css",
-		"primevue/resources/primevue.css",
-		"primeicons/primeicons.css",
 		"@/assets/css/styles.css",
 		"@/assets/css/input.css",
 	],
@@ -37,5 +34,5 @@ export default defineNuxtConfig({
 		},
 	},
 
-	modules: ["@nuxtjs/tailwindcss"],
+	modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt"],
 });

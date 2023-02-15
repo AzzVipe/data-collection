@@ -17,7 +17,7 @@
 		initPopovers,
 		initTooltips,
 	} from "flowbite";
-	definePageMeta({ middleware: ["admin-auth"] });
+	// definePageMeta({ middleware: ["admin-auth"] });
 	const { app: realmApp, fetchUsers } = useMyRealmApp();
 	const userData = ref();
 	const users = ref();
@@ -40,7 +40,7 @@
 
 	const signOut = () => {
 		realmApp.currentUser.logOut();
-		localStorage.removeItem("isAdmin");
+		localStorage.clear();
 		navigateTo("");
 	};
 </script>
