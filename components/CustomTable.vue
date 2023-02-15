@@ -1,13 +1,13 @@
 <template>
 	<div
 		v-if="(tableData !== null && tableData === 0) || tableData"
-		class="flex flex-col w-full justify-center items-center p-4 gap-4">
+		class="flex flex-col justify-center p-4 gap-4">
 		<div class="overflow-x-auto lg:w-full shadow-md sm:rounded-lg">
 			<table
 				v-if="tableData"
-				class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+				class="text-sm text-left text-gray-500 dark:text-gray-400">
 				<thead
-					class="text-sm font-semibold text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
+					class="text-sm font-bold text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-200 tracking-wider">
 					<tr>
 						<th
 							v-for="col in columns"
@@ -27,10 +27,10 @@
 						<td v-for="col in columns" :key="col.id" class="p-2">
 							<p
 								v-if="!isCurrentItem(data._id) || toggle === false"
-								class="overflow-y-scroll px-4 h-6">
+								class="px-4 py-2 h-20 leading-6 overflow-y-hidden">
 								{{ data[col.field] }}
 							</p>
-							<div v-else>
+							<div v-else class="">
 								<DropDown
 									@dropdown-edit="dropEdit($event, index, col.field)"
 									v-if="col.type === 'dropdown'"
@@ -44,9 +44,10 @@
 								<input
 									v-else
 									type="text"
-									class="dark:bg-slate-400 w-44 bg-slate-300 text-slate-900 overflow-x-scroll px-4 py-2.5 rounded-lg"
+									class="dark:bg-slate-400 bg-slate-300 text-slate-900 px-4 py-2.5 rounded-lg"
 									v-model="data[col.field]" />
 							</div>
+							<!-- <div class="h-20"></div> -->
 						</td>
 						<td class="px-6 py-4 text-right flex gap-4">
 							<button
@@ -146,7 +147,7 @@
 		<button
 			@click="addRow"
 			type="button"
-			class="text-white self-start bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
+			class="text-white self-start bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
 			Add Row
 		</button>
 	</div>
@@ -162,7 +163,7 @@
 	const columns = ref();
 	const tableDocCopy = ref();
 	const currentItem = ref(null);
-	const { currentUser } = useMyRealmApp();
+	const { app: realmApp } = useMyRealmApp();
 
 	const emit = defineEmits(["reRender"]);
 
@@ -221,7 +222,7 @@
 
 	const addRow = async () => {
 		let jsonObj = {};
-		jsonObj["user_id"] = currentUser.id;
+		jsonObj["user_id"] = realmApp.currentUser.id;
 		columns.value.forEach((element) => {
 			jsonObj[element.field] = " ";
 		});

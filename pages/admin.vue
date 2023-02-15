@@ -2,7 +2,8 @@
 	<div>
 		<NavBar @sign-out="signOut" />
 		<SideBar />
-		<div class="sm:ml-64 mt-14 container-height bg-gray-50 dark:bg-gradient2">
+		<div
+			class="min-[2000]:ml-56 mt-14 container-height bg-gray-50 dark:bg-gradient2">
 			<NuxtPage />
 		</div>
 	</div>
@@ -16,13 +17,13 @@
 		initPopovers,
 		initTooltips,
 	} from "flowbite";
-	// definePageMeta({ middleware: ["admin-auth"] });
-	const { currentUser, app: realmApp, fetchUsers } = useMyRealmApp();
+	definePageMeta({ middleware: ["admin-auth"] });
+	const { app: realmApp, fetchUsers } = useMyRealmApp();
 	const userData = ref();
 	const users = ref();
 
 	onBeforeMount(() => {
-		userData.value = currentUser.customData;
+		userData.value = realmApp.currentUser.customData;
 	});
 
 	onMounted(() => {
@@ -39,7 +40,7 @@
 
 	const signOut = () => {
 		realmApp.currentUser.logOut();
-		localStorage.clear();
+		localStorage.removeItem("isAdmin");
 		navigateTo("");
 	};
 </script>

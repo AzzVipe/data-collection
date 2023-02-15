@@ -108,8 +108,8 @@
 			.logIn(credentials)
 			.then((user) => {
 				console.log(user);
-				realmApp.currentUser.refreshCustomData();
-				realmApp.currentUser.callFunction("is_admin").then((data) => {
+				user.refreshCustomData();
+				user.callFunction("is_admin").then((data) => {
 					if (data === true) {
 						localStorage.setItem("isAdmin", true);
 						navigateTo("/admin");
@@ -118,6 +118,7 @@
 						navigateTo("/user");
 					}
 				});
+				localStorage.setItem("isLoggedIn", true);
 			})
 			.catch((err) => {
 				errMsg.value = "* Invalid username/password";

@@ -1,10 +1,8 @@
 export default defineNuxtRouteMiddleware((to, from) => {
-	const { currentUser } = useMyRealmApp();
-	console.log(currentUser);
-	if (currentUser === null) {
-		console.log("test");
+	const { app: realmApp } = useMyRealmApp();
+
+	console.log(realmApp.currentUser);
+	if (!realmApp.currentUser) {
 		return abortNavigation();
-	} else {
-		navigateTo("/");
 	}
 });

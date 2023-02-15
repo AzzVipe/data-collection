@@ -1,13 +1,16 @@
 export default defineNuxtRouteMiddleware((to, from) => {
-	const { currentUser } = useMyRealmApp();
+	const { app: realmApp } = useMyRealmApp();
+	let flag = false;
 
-	if (currentUser === null) {
-		// alert("Login First");
+	if (realmApp.currentUser === null) {
 		return abortNavigation();
 	}
-	currentUser.callFunction("is_admin").then((data) => {
-		if (data === false) abortNavigation();
+
+	realmApp.currentUser.callFunction("is_admin").then((data) => {
+		flag = data;
 	});
+
+	if (!flag) return abortNavigation();
 
 	navigateTo("");
 });

@@ -5,11 +5,20 @@ import axios from "axios";
 export const useMyRealmApp = () => {
 	const appId = "application-0-ksuyw";
 
-	const app = new Realm.App({
+	let app = new Realm.App({
 		id: appId,
 	});
 
-	const currentUser = app.currentUser;
+	const getApp = () => {
+		return Realm.getApp(appId);
+	};
+
+	const getCurrentUser = () => {
+		return new Promise((resolve, reject) => {
+			const app = getApp();
+			resolve(app.currentUser);
+		});
+	};
 
 	async function graphqlOperation(graphql) {
 		let resData = null;
@@ -72,5 +81,5 @@ export const useMyRealmApp = () => {
 		return temp;
 	}
 
-	return { app, Realm, currentUser, fetchUsers };
+	return { app, Realm, fetchUsers, getApp, getCurrentUser };
 };

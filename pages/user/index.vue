@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="mt-14">
+		<div class="mt-14 p-4">
 			<h1
 				class="text-black dark:text-white text-2xl p-4 font-bold uppercase mt-4">
 				Past / Continuing Stage

@@ -1,7 +1,7 @@
 <template>
 	<aside
 		id="logo-sidebar"
-		class="fixed shadow dark:shadow-slate-700 top-0 left-0 z-40 w-56 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gradient dark:border-gray-600"
+		class="fixed shadow dark:shadow-slate-700 top-0 left-0 z-40 w-56 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 min-[2000]:translate-x-0 dark:bg-gradient dark:border-gray-600"
 		aria-label="Sidebar">
 		<div class="h-full px-3 pb-4 overflow-y-auto">
 			<ul class="space-y-2">

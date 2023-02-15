@@ -4,7 +4,7 @@
 		<SideBar />
 
 		<div
-			class="sm:ml-56 mt-14 min-container-height bg-gray-50 dark:bg-gradient2">
+			class="min-[2000]:ml-56 mt-14 min-container-height bg-gray-50 dark:bg-gradient2">
 			<NuxtPage />
 		</div>
 	</div>
@@ -19,9 +19,24 @@
 		initTooltips,
 	} from "flowbite";
 
-	// definePageMeta({ middleware: ["auth"] });
+	definePageMeta({
+		validate: async (route) => {
+			const { getCurrentUser } = useMyRealmApp();
+			let flag;
 
-	const { currentUser, app: realmApp, fetchUsers } = useMyRealmApp();
+			await getCurrentUser().then((currentUser) => {
+				console.log(currentUser);
+				if (currentUser === null) flag = false;
+				else flag = true;
+				console.log(flag);
+			});
+			console.log(flag);
+
+			return flag;
+		},
+	});
+
+	const { fetchUsers, app: realmApp } = useMyRealmApp();
 	const users = ref();
 
 	onMounted(() => {
