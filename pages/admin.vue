@@ -17,8 +17,10 @@
 		initPopovers,
 		initTooltips,
 	} from "flowbite";
-	// definePageMeta({ middleware: ["admin-auth"] });
 	const { app: realmApp, fetchUsers } = useMyRealmApp();
+	const router = useRouter();
+	if (realmApp.currentUser === null) router.back();
+
 	const userData = ref();
 	const users = ref();
 

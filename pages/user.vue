@@ -20,6 +20,8 @@
 	} from "flowbite";
 
 	const { app: realmApp } = useMyRealmApp();
+	const router = useRouter();
+	if (realmApp.currentUser === null) router.back();
 
 	onMounted(() => {
 		initDrawers();

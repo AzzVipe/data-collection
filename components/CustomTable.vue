@@ -7,13 +7,31 @@
 					class="text-sm font-bold text-gray-700 uppercase bg-slate-200 dark:bg-gray-700 dark:text-gray-200 tracking-wider">
 					<tr>
 						<th
+							:data-tooltip-target="`tooltip-default-${col.header}`"
 							v-for="col in columns"
 							:key="col.id"
 							scope="col"
-							class="px-6 py-3">
-							{{ col.header }}
+							class="px-4 py-2">
+							<p v-if="col.type === 'dropdown'" class="max-w-[140px]">
+								{{ col.header }}
+							</p>
+							<p
+								v-else-if="col.type === 'string' && col.field !== 'comments'"
+								class="max-w-[120px]">
+								{{ col.header }}
+							</p>
+							<p v-else class="">
+								{{ col.header }}
+							</p>
+							<div
+								:id="`tooltip-default-${col.header}`"
+								role="tooltip"
+								class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+								{{ col.header }}
+								<div class="tooltip-arrow" data-popper-arrow></div>
+							</div>
 						</th>
-						<th scope="col" class="px-6 py-3">Action</th>
+						<th v-if="!submitted" scope="col" class="px-4 py-3">Action</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -24,10 +42,10 @@
 						<td v-for="col in columns" :key="col.id" class="p-2">
 							<p
 								v-if="!isCurrentItem(data._id) || toggle === false"
-								class="px-4 py-2 h-20 leading-6 overflow-y-hidden">
+								class="px-2 py-2 h-20 leading-6 overflow-y-hidden">
 								{{ data[col.field] }}
 							</p>
-							<div v-else class="">
+							<div v-else>
 								<DropDown
 									@dropdown-edit="dropEdit($event, index, col.field)"
 									v-if="col.type === 'dropdown'"
@@ -36,17 +54,17 @@
 								<input
 									v-else-if="col.type === 'string' && col.field !== 'comments'"
 									type="text"
-									class="dark:bg-slate-400 bg-slate-300 text-slate-900 w-32 overflow-x-scroll px-4 py-2.5 rounded-lg"
+									class="dark:bg-slate-400 bg-slate-300 max-w-[120px] text-slate-900 overflow-x-scroll px-4 py-2.5 rounded-lg"
 									v-model="data[col.field]" />
 								<input
 									v-else
 									type="text"
-									class="dark:bg-slate-400 bg-slate-300 text-slate-900 px-4 py-2.5 rounded-lg"
+									class="dark:bg-slate-400 bg-slate-300 text-slate-900 max-w-[200px] px-4 py-2.5 rounded-lg"
 									v-model="data[col.field]" />
 							</div>
 							<!-- <div class="h-20"></div> -->
 						</td>
-						<td class="px-6 py-4 text-right flex gap-4">
+						<td class="px-6 py-4 text-right flex gap-4" v-if="!submitted">
 							<button
 								v-if="isCurrentItem(data._id)"
 								@click="updateRow(data)"
@@ -79,8 +97,9 @@
 							</button>
 						</td>
 						<div
-							:id="`popup-modal-${index}-${config.tableName}`"
+							v-if="!submitted"
 							tabindex="-1"
+							:id="`popup-modal-${index}-${config.tableName}`"
 							class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
 							<div class="relative w-full h-full max-w-md md:h-auto">
 								<div
@@ -118,7 +137,7 @@
 										</svg>
 										<h3
 											class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-											Are you sure you want to delete this product?
+											Are you sure you want to delete this record?
 										</h3>
 										<button
 											:data-modal-hide="`popup-modal-${index}-${config.tableName}`"
@@ -141,27 +160,33 @@
 				</tbody>
 			</table>
 		</div>
-		<button
-			v-if="tableData.length === 0"
-			@click="addRow"
-			type="button"
-			class="text-white self-start bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-			Create new table
-		</button>
-		<button
-			v-else
-			@click="addRow"
-			type="button"
-			class="text-white self-start bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-			Add Row
-		</button>
+		<div v-if="!submitted">
+			<button
+				v-if="tableData.length === 0"
+				@click="addRow"
+				type="button"
+				class="text-white self-start bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+				Create new table
+			</button>
+			<button
+				v-else
+				@click="addRow"
+				type="button"
+				class="text-white self-start bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+				Add Row
+			</button>
+		</div>
 	</div>
 </template>
 
 <script setup>
-	import { initModals } from "flowbite";
+	import { initModals, initTooltips } from "flowbite";
 
-	const { config, tableData } = defineProps(["config", "tableData"]);
+	const { config, tableData, submitted } = defineProps([
+		"config",
+		"tableData",
+		"submitted",
+	]);
 	const toggle = ref(false);
 	const columns = ref();
 	const tableDocCopy = ref();
@@ -191,6 +216,7 @@
 		});
 
 		initModals();
+		initTooltips();
 	});
 
 	const isCurrentItem = (id) => {
@@ -220,6 +246,8 @@
 	const addRow = async () => {
 		let jsonObj = {};
 		jsonObj["user_id"] = realmApp.currentUser.id;
+		jsonObj["created_at"] = new Date();
+
 		columns.value.forEach((element) => {
 			jsonObj[element.field] = " ";
 		});
@@ -254,6 +282,7 @@
 			jsonObj[element.field] = data[element.field];
 		});
 		jsonObj["user_id"] = data.user_id;
+		jsonObj["updated_at"] = new Date();
 		const jsonText = JSON.stringify(jsonObj);
 		const unquotedText = jsonText.replace(/"([^"]+)":/g, "$1:");
 		console.log(unquotedText);
@@ -293,7 +322,12 @@
 		for (index = 0; index < tableData.length; index++) {
 			if (tableData[index]._id === data._id) break;
 		}
-		if (index <= tableData.length) tableData[index] = tableDocCopy.value;
+		if (index <= tableData.length) {
+			columns.forEach((col) => {
+				console.log(col.name);
+			});
+			tableData[index] = tableDocCopy.value;
+		}
 		console.log(data);
 		currentItem.value = 0;
 		tableDocCopy.value = null;

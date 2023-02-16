@@ -5,13 +5,19 @@ import axios from "axios";
 export const useMyRealmApp = () => {
 	const appId = "application-0-ksuyw";
 
-	let app = new Realm.App({
+	// let app = inject("RealmApp");
+	// console.log(app);
+	const app = new Realm.App({
 		id: appId,
 	});
+	// RealmApp = app;
 	const currentUser = app.currentUser;
+	// console.log(currentUser);
 
 	const getApp = () => {
-		app = Realm.getApp(appId);
+		return new Promise((resolve, reject) => {
+			resolve(app);
+		});
 	};
 
 	const getCurrentUser = () => {
@@ -43,6 +49,7 @@ export const useMyRealmApp = () => {
 			.catch((error) => {
 				resData = null;
 				console.log("error", error.response);
+				if (error.response.status === 401) navigateTo("/");
 			});
 
 		return resData;
@@ -90,7 +97,9 @@ export const useMyRealmApp = () => {
 					comments
 					my_capability
 					my_interest
-					service 
+					service
+					created_at
+					updated_at
 				}
 			}`,
 			variables: {},
@@ -98,7 +107,6 @@ export const useMyRealmApp = () => {
 
 		await graphqlOperation(graphql).then((data) => {
 			temp = data;
-			console.log(temp);
 		});
 
 		return temp;
@@ -120,6 +128,8 @@ export const useMyRealmApp = () => {
 					service_quality
 					skills
 	        user_id
+					created_at
+					updated_at
 				}
 			}`,
 			variables: {},
@@ -149,6 +159,8 @@ export const useMyRealmApp = () => {
 					service_quality
 					skills
 	        user_id
+					created_at
+					updated_at
 				}
 			}`,
 			variables: {},

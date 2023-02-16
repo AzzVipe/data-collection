@@ -10,7 +10,7 @@
 							class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white mb-8">
 							Sign in to your account
 						</h1>
-						<form class="space-y-4 md:space-y-6" @submit.prevent="signIn">
+						<div class="space-y-4 md:space-y-6">
 							<div>
 								<label
 									for="email"
@@ -45,11 +45,26 @@
 							</div>
 							<p v-if="errMsg" class="text-red-500 mb-4">{{ errMsg }}</p>
 							<button
+								@click="signIn"
 								type="submit"
-								class="w-full text-white bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+								class="w-full text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
 								Sign in
 							</button>
-						</form>
+							<div
+								class="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5">
+								<p
+									class="text-center font-semibold mx-4 mb-0 dark:text-white text-black">
+									OR
+								</p>
+							</div>
+							<button
+								@click="googleLogin"
+								type="submit"
+								class="w-full flex items-center justify-center gap-2 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
+								<i class="ri-google-fill"></i>
+								Sign in with Google
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -95,6 +110,23 @@
 				errMsg.value = "* Invalid username/password";
 				console.log(err);
 			});
+	};
+
+	const googleLogin = () => {
+		const redirectURI = "http://localhost:3000/callback";
+
+		const credentials = Realm.Credentials.google({
+			redirectUrl: redirectURI,
+		});
+
+		realmApp
+			.logIn(credentials)
+			.then((user) => {
+				console.log(user);
+				navigateTo("/user");
+				// loading.value = false;
+			})
+			.catch((err) => console.error(err));
 	};
 
 	// onBeforeMount(() => {
