@@ -113,7 +113,7 @@
 	};
 
 	const googleLogin = () => {
-		const redirectURI = "http://localhost:3000/callback";
+		const redirectURI = `${window.location.protocol}//${window.location.host}/callback`;
 
 		const credentials = Realm.Credentials.google({
 			redirectUrl: redirectURI,
