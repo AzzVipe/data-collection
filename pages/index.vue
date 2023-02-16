@@ -114,6 +114,7 @@
 
 	const googleLogin = () => {
 		const redirectURI = `${window.location.protocol}//${window.location.host}/callback`;
+		console.log(redirectURI);
 
 		const credentials = Realm.Credentials.google({
 			redirectUrl: redirectURI,
