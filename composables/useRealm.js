@@ -1,31 +1,14 @@
 import * as Realm from "realm-web";
 import axios from "axios";
-// import graphqlOperation from "@/utils/graphql";
 
 export const useMyRealmApp = () => {
-	const appId = "application-0-ksuyw";
+	const appId = useRuntimeConfig().public.APP_ID;
 
-	// let app = inject("RealmApp");
-	// console.log(app);
 	const app = new Realm.App({
 		id: appId,
 	});
-	// RealmApp = app;
+
 	const currentUser = app.currentUser;
-	// console.log(currentUser);
-
-	const getApp = () => {
-		return new Promise((resolve, reject) => {
-			resolve(app);
-		});
-	};
-
-	const getCurrentUser = () => {
-		return new Promise((resolve, reject) => {
-			const app = getApp();
-			resolve(app.currentUser);
-		});
-	};
 
 	async function graphqlOperation(graphql) {
 		let resData = null;
@@ -173,15 +156,38 @@ export const useMyRealmApp = () => {
 		return temp;
 	}
 
+	async function fetchTableConfig(tableName) {
+		let temp;
+		let graphql = JSON.stringify({
+			query: `query {
+				tableConfig(query: {name: "${tableName}"}) {
+					_id
+					config {
+						field
+						header
+						type
+						description
+					}
+				}
+			}`,
+			variables: {},
+		});
+
+		await graphqlOperation(graphql).then((data) => {
+			temp = data;
+		});
+
+		return temp;
+	}
+
 	return {
 		app,
 		Realm,
 		fetchUsers,
-		getApp,
-		getCurrentUser,
 		fetchlevel1,
 		fetchlevel2,
 		fetchlevel3,
+		fetchTableConfig,
 		currentUser,
 		graphqlOperation,
 	};

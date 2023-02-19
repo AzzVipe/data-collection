@@ -24,12 +24,36 @@
 
 		<div
 			:id="`dropdownRadioHelper${field}`"
-			class="z-10 hidden w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
+			class="z-10 hidden w-96 max-h-[500px] overflow-y-scroll bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
 			<ul
 				class="p-3 space-y-3 text-sm text-gray-700 dark:text-gray-200"
 				aria-labelledby="dropdownRadioButton">
 				<li v-for="(opt, index) in option" :key="opt.id">
-					<div class="flex items-center">
+					<div
+						class="flex p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+						<div class="flex items-center h-5">
+							<input
+								:id="`default-radio-1-${field}-${index}`"
+								name="default-radio"
+								type="radio"
+								:value="opt.name"
+								v-model="optValue"
+								class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+						</div>
+						<div class="ml-2 text-sm">
+							<label
+								:for="`default-radio-1-${field}-${index}`"
+								class="font-medium text-gray-900 dark:text-gray-300">
+								<div>{{ opt.name }}</div>
+								<p
+									id="helper-radio-text-4"
+									class="text-xs font-normal text-gray-500 dark:text-gray-300">
+									{{ opt.description }}
+								</p>
+							</label>
+						</div>
+					</div>
+					<!-- <div class="flex items-center">
 						<input
 							:id="`default-radio-1-${field}-${index}`"
 							type="radio"
@@ -39,10 +63,11 @@
 							class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
 						<label
 							:for="`default-radio-1-${field}-${index}`"
+							:data-dropdown-hide="`dropdownRadioHelper${field}`"
 							class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
 							>{{ opt.name }}</label
 						>
-					</div>
+					</div> -->
 				</li>
 			</ul>
 		</div>

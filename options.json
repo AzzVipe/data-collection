@@ -11,73 +11,185 @@
 		{
 			"field": "customer",
 			"option": [
-				{ "name": "My manager" },
-				{ "name": "My self" },
-				{ "name": "My team" },
-				{ "name": "Peers" },
-				{ "name": "Leaders" },
-				{ "name": "Executive Staff" },
-				{ "name": "Functional Group" },
-				{ "name": "Company" },
-				{ "name": "General Employees" },
-				{ "name": "External Customer" },
-				{ "name": "Partner" },
-				{ "name": "Other" }
+				{
+					"name": "My manager",
+					"description": "The customer who benefits from this service is your manager."
+				},
+				{
+					"name": "My self",
+					"description": "Your primary customer of this service is yourself"
+				},
+				{
+					"name": "My team",
+					"description": "Your customer benefiting from service is your team."
+				},
+				{ "name": "Peers", "description": "Your customer is a peer." },
+				{
+					"name": "Leaders",
+					"description": "Your customer is leaders across the company"
+				},
+				{
+					"name": "Executive Staff",
+					"description": "Your customer for this service is the executive staff (direct reports to CEO)"
+				},
+				{
+					"name": "Functional Group",
+					"description": "Your customer for is a functional group that requires the service."
+				},
+				{
+					"name": "Company",
+					"description": "Your customer for this service is the whole company (or at least a number of groups within the company)."
+				},
+				{
+					"name": "General Employees",
+					"description": "Your customer for this are employees."
+				},
+				{
+					"name": "External Customer",
+					"description": "Your customer for this service is a customer of the company."
+				},
+				{
+					"name": "Partner",
+					"description": "Your customer is a third party partner."
+				},
+				{
+					"name": "Other",
+					"description": "Your customer for this service is someone other than the options provided."
+				}
 			]
 		},
 		{
 			"field": "impact",
 			"option": [
-				{ "name": "Revenue Gen" },
-				{ "name": "Profitability" },
-				{ "name": "Customer Sat" },
-				{ "name": "Employee Sat" },
-				{ "name": "Risk Management" },
-				{ "name": "Other" }
+				{
+					"name": "Revenue Gen",
+					"description": "Directly impacts revenue generation"
+				},
+				{
+					"name": "Profitability",
+					"description": "Directly impacts the profit of the company (saves cost, reduces waste, streamlines, makes org more efficient)"
+				},
+				{
+					"name": "Customer Sat",
+					"description": "Directly impacts customer satisfaction"
+				},
+				{
+					"name": "Employee Sat",
+					"description": "Directly impacts employee satisfaction"
+				},
+				{
+					"name": "Risk Management",
+					"description": "Directly impacts risk reduction for the company"
+				},
+				{ "name": "Other", "description": "Other impact" }
 			]
 		},
 		{
 			"field": "skills",
 			"option": [
-				{ "name": "Core" },
-				{ "name": "Skilled" },
-				{ "name": "Expert" }
+				{
+					"name": "Core",
+					"description": "Requires a basic to modest level of training and/or experience to adequately deliver service"
+				},
+				{
+					"name": "Skilled",
+					"description": "Requires skilled problem-solving based on years of relevant knowledge or experience to adequately deliver service"
+				},
+				{
+					"name": "Expert",
+					"description": "Requires expert-level talent with hard-to-replace analytical, contextual or strategic experience"
+				}
 			]
 		},
 		{
 			"field": "service_quality",
 			"option": [
-				{ "name": "The service is working well" },
-				{ "name": "The service needs improving" },
 				{
-					"name": "Environmental / team dynamics impacting service effectiveness"
+					"name": "The service is working well",
+					"description": "This service does not need improving"
 				},
-				{ "name": "Improvement is in process" },
-				{ "name": "I want to lead improving this service" },
-				{ "name": "This service could be automated / autsourced" },
-				{ "name": "Service not needed / not adding value" }
+				{
+					"name": "The service needs improving",
+					"description": "This service does need improving"
+				},
+				{
+					"name": "Environmental / team dynamics impacting service effectiveness",
+					"description": "There is something going on in the environment or within the team that is having a negative impact on the quality/effectiveness of the service (e.g. toxic environment, exclusion/lack of belonging, poor leadership....)"
+				},
+				{
+					"name": "Improvement is in process",
+					"description": "A project is underway to improve this service"
+				},
+				{
+					"name": "I want to lead improving this service",
+					"description": "I want to lead or participate in improving this service"
+				},
+				{
+					"name": "This service could be automated / autsourced",
+					"description": "Some or all of this service could be automated/outsourced"
+				},
+				{
+					"name": "Service not needed / not adding value",
+					"description": "This service is not needed; can be eliminated"
+				}
 			]
 		},
 		{
 			"field": "my_capability",
 			"option": [
-				{ "name": "I am fully capable and confident" },
-				{ "name": "This service offers me an opportunity to grow" },
-				{ "name": "This is a stretch for me; need additional support" },
-				{ "name": "My talent is NOT aligned with this service" },
-				{ "name": "There is another person I know, which is better suited" }
+				{
+					"name": "I am fully capable and confident",
+					"description": "I am confident and capable in performing this service"
+				},
+				{
+					"name": "This service offers me an opportunity to grow",
+					"description": "I am learning and growing from this service"
+				},
+				{
+					"name": "This is a stretch for me; need additional support",
+					"description": "I want to improve my ability to perform this service and need additional support"
+				},
+				{
+					"name": "My talent is NOT aligned with this service",
+					"description": "My skills or strengths aren't aligned to perform this service"
+				},
+				{
+					"name": "There is another person I know, which is better suited",
+					"description": "I may or not be capable of doing this service, but there is someone who would be better (either because they really want to do it or just have the talent)"
+				}
 			]
 		},
 		{
 			"field": "my_interest",
 			"option": [
-				{ "name": "Enjoy this service; would like to keep doing it" },
-				{ "name": "Enjoy this service; would like to do more of it" },
-				{ "name": "Dislike this service; would prefer not to do it" },
-				{ "name": "Been there done that; I am not learning or growing" },
-				{ "name": "Would like to train / mentor others to do this service" },
-				{ "name": "Specific project that is completed / no longer needed" },
-				{ "name": "Not doing this, but would like to in the future" }
+				{
+					"name": "Enjoy this service; would like to keep doing it",
+					"description": "I enjoy this service; would like to keep doing it"
+				},
+				{
+					"name": "Enjoy this service; would like to do more of it",
+					"description": "I enjoy this service; would like to do more of it"
+				},
+				{
+					"name": "Dislike this service; would prefer not to do it",
+					"description": "Dislike this service; would prefer not to do it"
+				},
+				{
+					"name": "Been there done that; I am not learning or growing",
+					"description": "Been there done that; I am not learning or growing"
+				},
+				{
+					"name": "Would like to train / mentor others to do this service",
+					"description": "I would like to train/mentor others to do this service"
+				},
+				{
+					"name": "Specific project that is completed / no longer needed",
+					"description": "This was work or a service that no longer needs to be done; only needed to be completed once"
+				},
+				{
+					"name": "Not doing this, but would like to in the future",
+					"description": "I am not doing this, but would like to in the future"
+				}
 			]
 		}
 	]
