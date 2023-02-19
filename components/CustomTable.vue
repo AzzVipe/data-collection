@@ -7,28 +7,85 @@
 					class="text-sm font-bold text-gray-700 uppercase bg-slate-200 dark:bg-gray-700 dark:text-gray-200 tracking-wider">
 					<tr>
 						<th
-							:data-tooltip-target="`tooltip-default-${col.header}`"
 							v-for="col in columns"
 							:key="col.id"
 							scope="col"
 							class="px-4 py-2">
-							<p v-if="col.type === 'dropdown'" class="max-w-[140px]">
-								{{ col.header }}
+							<p
+								v-if="col.type === 'dropdown'"
+								class="max-w-[160px] inline-flex gap-2">
+								<span>{{ col.header }}</span>
+								<i
+									class="ri-question-fill"
+									:data-modal-target="`table-head-modal-${col.header}`"
+									:data-modal-toggle="`table-head-modal-${col.header}`" />
 							</p>
 							<p
 								v-else-if="col.type === 'string' && col.field !== 'comments'"
-								class="max-w-[120px]">
-								{{ col.header }}
+								class="max-w-[120px] inline-flex gap-2">
+								<span>{{ col.header }}</span>
+								<i
+									class="ri-question-fill"
+									:data-modal-target="`table-head-modal-${col.header}`"
+									:data-modal-toggle="`table-head-modal-${col.header}`" />
 							</p>
-							<p v-else class="">
-								{{ col.header }}
+							<p v-else class="inline-flex gap-2">
+								<span>{{ col.header }}</span>
+								<i
+									class="ri-question-fill"
+									:data-modal-target="`table-head-modal-${col.header}`"
+									:data-modal-toggle="`table-head-modal-${col.header}`" />
 							</p>
 							<div
-								:id="`tooltip-default-${col.header}`"
-								role="tooltip"
-								class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-								{{ col.header }}
-								<div class="tooltip-arrow" data-popper-arrow></div>
+								:id="`table-head-modal-${col.header}`"
+								data-modal-backdrop="static"
+								tabindex="-1"
+								aria-hidden="true"
+								class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+								<div class="relative w-full h-full max-w-2xl md:h-auto">
+									<div
+										class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+										<div
+											class="flex items-start justify-between p-6 border-b rounded-t dark:border-gray-600">
+											<h3
+												class="text-xl font-semibold text-gray-900 dark:text-white">
+												{{ col.header }}
+											</h3>
+											<button
+												type="button"
+												class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+												:data-modal-hide="`table-head-modal-${col.header}`">
+												<svg
+													class="w-5 h-5"
+													fill="currentColor"
+													viewBox="0 0 20 20"
+													xmlns="http://www.w3.org/2000/svg">
+													<path
+														fill-rule="evenodd"
+														d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+														clip-rule="evenodd"></path>
+												</svg>
+											</button>
+										</div>
+										<!-- Modal body -->
+										<div class="p-6 space-y-6">
+											<p
+												class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+												{{ col.description }}
+											</p>
+										</div>
+										<!-- Modal footer -->
+										<div
+											class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+											<button
+												:data-modal-hide="`table-head-modal-${col.header}`"
+												type="button"
+												class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+												I understand
+											</button>
+										</div>
+									</div>
+								</div>
 							</div>
 						</th>
 						<th v-if="!submitted" scope="col" class="px-4 py-3">Action</th>
@@ -180,43 +237,24 @@
 </template>
 
 <script setup>
-	import { initModals, initTooltips } from "flowbite";
+	import { initModals } from "flowbite";
 
-	const { config, tableData, submitted } = defineProps([
+	const { config, tableData, submitted, columns } = defineProps([
 		"config",
 		"tableData",
 		"submitted",
+		"columns",
 	]);
 	const toggle = ref(false);
-	const columns = ref();
 	const tableDocCopy = ref();
 	const currentItem = ref(null);
 	const { app: realmApp, currentUser, graphqlOperation } = useMyRealmApp();
 
-	const emit = defineEmits(["reRender"]);
+	const emit = defineEmits(["reRender", "updatedData"]);
 	toRefs(tableData);
 
 	onMounted(async () => {
-		let graphql = JSON.stringify({
-			query: `query {
-				tableConfig(query: {name: "${config.tableName}"}) {
-					_id
-					config {
-						field
-						header
-						type
-					}
-				}
-			}`,
-			variables: {},
-		});
-
-		await graphqlOperation(graphql).then((data) => {
-			columns.value = data.tableConfig.config;
-		});
-
 		initModals();
-		initTooltips();
 	});
 
 	const isCurrentItem = (id) => {
@@ -248,7 +286,7 @@
 		jsonObj["user_id"] = realmApp.currentUser.id;
 		jsonObj["created_at"] = new Date();
 
-		columns.value.forEach((element) => {
+		columns.forEach((element) => {
 			jsonObj[element.field] = " ";
 		});
 		const jsonText = JSON.stringify(jsonObj);
@@ -263,8 +301,6 @@
 		});
 		await graphqlOperation(graphql).then((data) => {
 			jsonObj["_id"] = data[config.insert]._id;
-			console.log(jsonObj["_id"]);
-			// console.log(data[config.insert]);
 		});
 		tableData.push(jsonObj);
 		emit("reRender");
@@ -275,17 +311,18 @@
 			console.log("not updated");
 			currentItem.value = 0;
 			tableDocCopy.value = null;
+			emit("reRender");
 			return;
 		}
 		let jsonObj = {};
-		columns.value.forEach((element) => {
+		columns.forEach((element) => {
 			jsonObj[element.field] = data[element.field];
 		});
 		jsonObj["user_id"] = data.user_id;
 		jsonObj["updated_at"] = new Date();
 		const jsonText = JSON.stringify(jsonObj);
 		const unquotedText = jsonText.replace(/"([^"]+)":/g, "$1:");
-		console.log(unquotedText);
+		// console.log(unquotedText);
 		const graphql = JSON.stringify({
 			query: `mutation {
 	      ${config.replace} (
@@ -303,7 +340,7 @@
 		console.log("updated");
 		currentItem.value = 0;
 		tableDocCopy.value = null;
-		// emit("reRender");
+		emit("updatedData", jsonObj);
 	};
 
 	const dropEdit = (updatedVal, index, field) => {
@@ -315,6 +352,7 @@
 			console.log("not updated");
 			currentItem.value = 0;
 			tableDocCopy.value = null;
+			emit("reRender");
 			return;
 		}
 
@@ -324,13 +362,16 @@
 		}
 		if (index <= tableData.length) {
 			columns.forEach((col) => {
-				console.log(col.name);
+				tableData[index][col.field] = tableDocCopy.value[col.field];
+				console.log(col);
 			});
-			tableData[index] = tableDocCopy.value;
+
+			// tableData[index] = tableDocCopy.value;
 		}
-		console.log(data);
+		console.log(tableDocCopy.value, tableData[index]);
 		currentItem.value = 0;
 		tableDocCopy.value = null;
+		emit("reRender");
 	};
 
 	const deleteRow = async (id) => {
