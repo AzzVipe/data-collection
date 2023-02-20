@@ -33,6 +33,7 @@
 						class="flex p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
 						<div class="flex items-center h-5">
 							<input
+								@click="dropdown.hide()"
 								:id="`default-radio-1-${field}-${index}`"
 								name="default-radio"
 								type="radio"
@@ -42,6 +43,7 @@
 						</div>
 						<div class="ml-2 text-sm">
 							<label
+								@click="dropdown.hide()"
 								:for="`default-radio-1-${field}-${index}`"
 								class="font-medium text-gray-900 dark:text-gray-300">
 								<div>{{ opt.name }}</div>
@@ -75,7 +77,7 @@
 </template>
 
 <script setup>
-	import { initDropdowns } from "flowbite";
+	import { initDropdowns, Dropdown } from "flowbite";
 	import optData from "@/options.json";
 
 	const emit = defineEmits(["dropdownEdit"]);
@@ -84,6 +86,7 @@
 	const options = optData.options;
 	const option = ref();
 	const optValue = ref(null);
+	const dropdown = ref(null);
 
 	watch(optValue, (newVal, oldVal) => {
 		if (oldVal !== null && oldVal != newVal) emit("dropdownEdit", newVal);
@@ -108,7 +111,28 @@
 	};
 
 	onMounted(() => {
-		initDropdowns();
+		const $targetEl = document.getElementById(`dropdownRadioHelper${field}`);
+		const $triggerEl = document.getElementById(
+			`dropdownRadioHelperButton${field}`
+		);
+		const options = {
+			placement: "bottom",
+			triggerType: "click",
+			offsetSkidding: 0,
+			offsetDistance: 10,
+			delay: 300,
+			onHide: () => {
+				console.log("dropdown has been hidden");
+			},
+			onShow: () => {
+				console.log("dropdown has been shown");
+			},
+			onToggle: () => {
+				console.log("dropdown has been toggled");
+			},
+		};
+		dropdown.value = new Dropdown($targetEl, $triggerEl, options);
+		// initDropdowns();
 		optValue.value = value;
 	});
 </script>

@@ -5,15 +5,14 @@ export default defineNuxtConfig({
 		"@/assets/css/styles.css",
 		"@/assets/css/input.css",
 	],
-	build: {
-		transpile: ["primevue"],
-	},
 
 	runtimeConfig: {
 		public: {
 			APP_ID: "application-0-ksuyw",
 		},
 	},
+
+	debug: true,
 
 	app: {
 		head: {

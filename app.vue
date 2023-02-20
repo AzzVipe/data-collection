@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-	onMounted(() => {
+	onBeforeMount(() => {
 		if (
 			localStorage.getItem("color-theme") === "dark" ||
 			(!("color-theme" in localStorage) &&

@@ -21,12 +21,7 @@
 	const router = useRouter();
 	if (realmApp.currentUser === null) router.back();
 
-	const userData = ref();
 	const users = ref();
-
-	onBeforeMount(() => {
-		userData.value = realmApp.currentUser.customData;
-	});
 
 	onMounted(() => {
 		fetchUsers().then((data) => {

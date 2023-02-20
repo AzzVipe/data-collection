@@ -62,7 +62,10 @@
 </template>
 
 <script setup>
-	const isAdmin = localStorage.getItem("isAdmin");
+	const isAdmin = ref(null);
+	onMounted(() => {
+		isAdmin.value = localStorage.getItem("isAdmin");
+	});
 </script>
 
 <style lang="scss" scoped></style>

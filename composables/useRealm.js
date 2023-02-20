@@ -12,13 +12,16 @@ export const useMyRealmApp = () => {
 
 	async function graphqlOperation(graphql) {
 		let resData = null;
+		const appId = useRuntimeConfig().public.APP_ID;
+
+		const temp = Realm.getApp(appId);
 
 		let requestOptions = {
 			method: "post",
 			maxBodyLength: Infinity,
 			url: "https://eu-west-1.aws.realm.mongodb.com/api/client/v2.0/app/application-0-ksuyw/graphql",
 			headers: {
-				Authorization: `Bearer ${app.currentUser._accessToken}`,
+				Authorization: `Bearer ${currentUser._accessToken}`,
 				"Content-Type": "application/json",
 			},
 			data: graphql,
@@ -83,6 +86,7 @@ export const useMyRealmApp = () => {
 					service
 					created_at
 					updated_at
+					user_id
 				}
 			}`,
 			variables: {},

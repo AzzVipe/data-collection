@@ -4,7 +4,7 @@
 			<div
 				class="flex justify-between p-4 items-start gap-2 flex-col sm:flex-row sm:items-center">
 				<h1
-					v-if="!submitted"
+					v-if="submitted === false"
 					class="font-bold text-black dark:text-gray-300 uppercase">
 					Last Changed at:
 					<span
@@ -13,13 +13,12 @@
 						>{{ new Date(lastUpdatedAt).toUTCString() }}</span
 					>
 				</h1>
-				<h1
-					v-else-if="submitted"
-					class="font-bold text-black dark:text-gray-300 uppercase">
+				<h1 v-else class="font-bold text-black dark:text-gray-300 uppercase">
 					Submitted at:
 					<span
+						v-if="submittedAt !== null"
 						class="dark:text-white text-gray-500 capitalize font-semibold"
-						>{{ new Date(Date(submittedAt)).toUTCString() }}</span
+						>{{ new Date(submittedAt).toUTCString() }}</span
 					>
 				</h1>
 				<button
@@ -93,7 +92,7 @@
 					class="flex p-4 items-start justify-between gap-2 text-black dark:text-white flex-col md:flex-row">
 					<h1 class="text-2xl font-bold uppercase">Past / Continuing Stage</h1>
 					<div
-						class="flex uppercase font-bold md:items-end dark:text-gray-300 flex-col xl:flex-row">
+						class="flex uppercase xl:gap-2 font-bold md:items-end dark:text-gray-300 flex-col xl:flex-row">
 						<p>
 							Total hours last 3 Months:
 							<span class="dark:text-white text-gray-500 font-semibold ml-auto"
@@ -116,7 +115,7 @@
 					:columns="level1Config"
 					:tableData="level1"
 					:submitted="submitted"
-					@updated-data="calculateLastUpdatedAt"
+					@updated-data="updatedCallback"
 					@re-render="reRender" />
 			</div>
 			<div>
@@ -139,7 +138,7 @@
 					:tableData="level2"
 					:config="graphqlConfig2"
 					:submitted="submitted"
-					@updated-data="calculateLastUpdatedAt"
+					@updated-data="updatedCallback"
 					@re-render="reRender" />
 			</div>
 
@@ -153,7 +152,7 @@
 					:columns="level3Config"
 					:key="componentKey"
 					:submitted="submitted"
-					@updated-data="calculateLastUpdatedAt"
+					@updated-data="updatedCallback"
 					:config="graphqlConfig3"
 					@re-render="reRender" />
 			</div>
@@ -163,6 +162,7 @@
 
 <script setup>
 	import { initDropdowns } from "flowbite";
+
 	const componentKey = ref(1);
 	const totalHourLevel1last = ref(0);
 	const totalHourLevel1next = ref(0);
@@ -174,8 +174,9 @@
 	const level1Config = ref(null);
 	const level2Config = ref(null);
 	const level3Config = ref(null);
-	const submitted = ref();
+	const submitted = ref(false);
 	const submittedAt = ref(null);
+
 	const {
 		fetchlevel1,
 		fetchlevel2,
@@ -207,37 +208,67 @@
 		delete: "deleteOneLevel3",
 	});
 
-	if (currentUser.customData.form_status === "submitted") {
-		submitted.value = true;
-		console.log(currentUser.customData.submitted_at.$date.$numberLong);
-		submittedAt.value = currentUser.customData.submitted_at.$date.$numberLong;
-	} else submitted.value = false;
+	onBeforeMount(async () => {
+		await fetchTableConfig(graphqlConfig.value.tableName).then((data) => {
+			level1Config.value = data.tableConfig.config;
+		});
 
-	await fetchTableConfig(graphqlConfig.value.tableName).then((data) => {
-		level1Config.value = data.tableConfig.config;
+		await fetchTableConfig(graphqlConfig2.value.tableName).then((data) => {
+			level2Config.value = data.tableConfig.config;
+		});
+
+		await fetchTableConfig(graphqlConfig3.value.tableName).then((data) => {
+			level3Config.value = data.tableConfig.config;
+		});
+
+		await fetchlevel1().then((data) => {
+			level1.value = data.level1s;
+			level1.value.forEach((data) => {
+				totalHourLevel1last.value += new Number(data.hours_last_3_months);
+				totalHourLevel1next.value += new Number(data.hours_next_3_months);
+			});
+		});
+
+		await fetchlevel2().then((data) => {
+			level2.value = data.level2s;
+
+			level2.value.forEach((data) => {
+				totalHourLevel2next.value += new Number(data.hours_next_3_months);
+			});
+		});
+
+		await fetchlevel3().then((data) => {
+			level3.value = data.level3s;
+		});
+
+		calculateLastUpdatedAt();
+		if (currentUser.customData.form_status === "submitted") {
+			submitted.value = true;
+			// console.log(currentUser.customData.submitted_at.$date.$numberLong);
+			submittedAt.value = Number(
+				currentUser.customData.submitted_at.$date.$numberLong
+			);
+		} else submitted.value = false;
+		// console.log(level3.value, level3Config.value);
 	});
 
-	await fetchTableConfig(graphqlConfig2.value.tableName).then((data) => {
-		level2Config.value = data.tableConfig.config;
-	});
-
-	await fetchTableConfig(graphqlConfig3.value.tableName).then((data) => {
-		level3Config.value = data.tableConfig.config;
-	});
-
-	await fetchlevel1().then((data) => {
-		level1.value = data.level1s;
-	});
-
-	await fetchlevel2().then((data) => {
-		level2.value = data.level2s;
-	});
-
-	await fetchlevel3().then((data) => {
-		level3.value = data.level3s;
-	});
+	const updatedCallback = (newData) => {
+		totalHourLevel1last.value = 0;
+		totalHourLevel1next.value = 0;
+		level1.value.forEach((data) => {
+			totalHourLevel1last.value += new Number(data.hours_last_3_months);
+			totalHourLevel1next.value += new Number(data.hours_next_3_months);
+		});
+		totalHourLevel2next.value = 0;
+		level2.value.forEach((data) => {
+			totalHourLevel2next.value += new Number(data.hours_next_3_months);
+		});
+		calculateLastUpdatedAt(newData);
+	};
 
 	const isTableEmpty = () => {
+		if (level1.value === null || level2.value === null || level3.value === null)
+			return false;
 		if (
 			level1.value.length === 0 ||
 			level2.value.length === 0 ||
@@ -302,39 +333,12 @@
 		});
 	};
 
-	level1.value.forEach((data) => {
-		totalHourLevel1last.value += new Number(data.hours_last_3_months);
-		totalHourLevel1next.value += new Number(data.hours_next_3_months);
-	});
-
-	level2.value.forEach((data) => {
-		totalHourLevel2next.value += new Number(data.hours_next_3_months);
-	});
-
-	calculateLastUpdatedAt();
-
 	const reRender = () => {
 		componentKey.value++;
 	};
 
 	onMounted(() => {
 		initDropdowns();
-	});
-
-	watch(level1.value, (newVal, oldVal) => {
-		totalHourLevel1last.value = 0;
-		totalHourLevel1next.value = 0;
-		level1.value.forEach((data) => {
-			totalHourLevel1last.value += new Number(data.hours_last_3_months);
-			totalHourLevel1next.value += new Number(data.hours_next_3_months);
-		});
-	});
-
-	watch(level2.value, (newVal, oldVal) => {
-		totalHourLevel2next.value = 0;
-		level2.value.forEach((data) => {
-			totalHourLevel2next.value += new Number(data.hours_next_3_months);
-		});
 	});
 </script>
 
