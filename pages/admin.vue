@@ -41,5 +41,3 @@
 		navigateTo("");
 	};
 </script>
-
-<style scoped></style>
