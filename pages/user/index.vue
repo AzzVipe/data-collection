@@ -264,6 +264,7 @@
 			totalHourLevel2next.value += new Number(data.hours_next_3_months);
 		});
 		calculateLastUpdatedAt(newData);
+		reRender();
 	};
 
 	const isTableEmpty = () => {

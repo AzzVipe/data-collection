@@ -23,17 +23,16 @@
 								d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
 						</svg>
 					</button>
-					<a href="https://flowbite.com" class="flex ml-2 md:mr-24">
+					<NuxtLink to="/user" class="flex ml-2 cursor-pointer md:mr-24">
 						<span
-							class="self-center text-xl font-extrabold sm:text-2xl whitespace-nowrap dark:text-white tracking-wider"
+							class="self-center text-medium font-extrabold sm:text-2xl whitespace-nowrap dark:text-white tracking-wider"
 							>HR Data Collection App</span
 						>
-					</a>
+					</NuxtLink>
 				</div>
 				<div class="flex items-center">
-					<div class="flex items-center justify-center ml-3 gap-4">
+					<div class="flex items-center justify-center ml-3 gap-2 sm:gap-4">
 						<button
-							@click="toggleDarkMode"
 							id="theme-toggle"
 							type="button"
 							class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-full w-8 h-8">
@@ -76,11 +75,12 @@
 							</div>
 							<ul class="py-1" role="none">
 								<li>
-									<button
+									<NuxtLink
+										to="/user"
 										class="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
 										role="menuitem">
 										<p class="text-left">Dashboard</p>
-									</button>
+									</NuxtLink>
 								</li>
 								<li>
 									<button
@@ -119,6 +119,11 @@
 
 	const { currentUser } = useMyRealmApp();
 	const userData = ref(null);
+
+	onBeforeMount(() => {
+		userData.value = currentUser.customData;
+	});
+
 	onMounted(() => {
 		initDrawers();
 		initDropdowns();
@@ -126,7 +131,6 @@
 		initPopovers();
 		initTooltips();
 		toggleDarkMode();
-		userData.value = currentUser.customData;
 	});
 
 	const toggleDarkMode = () => {

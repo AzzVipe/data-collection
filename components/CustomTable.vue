@@ -319,6 +319,7 @@
 			jsonObj[element.field] = data[element.field];
 		});
 		jsonObj["user_id"] = data.user_id;
+		jsonObj["created_at"] = data.created_at;
 		jsonObj["updated_at"] = new Date();
 		const jsonText = JSON.stringify(jsonObj);
 		const unquotedText = jsonText.replace(/"([^"]+)":/g, "$1:");
@@ -393,10 +394,13 @@
 			if (tableData[index]._id === id) break;
 		}
 
+		console.log(tableData);
+
 		if (index <= tableData.length) {
-			if (tableData.length > 1) tableData.splice(index, index);
+			if (tableData.length > 1) tableData.splice(index, 1);
 			else tableData.pop();
 		}
+		console.log(tableData);
 	};
 </script>
 
