@@ -48,6 +48,7 @@
 						</button>
 						<div>
 							<button
+								v-if="userData !== null"
 								type="button"
 								class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
 								aria-expanded="false"
@@ -60,6 +61,7 @@
 							</button>
 						</div>
 						<div
+							v-if="userData !== null"
 							class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
 							id="dropdown-user">
 							<div class="px-4 py-3" role="none">
@@ -115,13 +117,8 @@
 
 	const emit = defineEmits(["signOut"]);
 
-	const { app: realmApp } = useMyRealmApp();
-	const userData = ref();
-
-	onBeforeMount(() => {
-		userData.value = realmApp.currentUser.customData;
-	});
-
+	const { currentUser } = useMyRealmApp();
+	const userData = ref(null);
 	onMounted(() => {
 		initDrawers();
 		initDropdowns();
@@ -129,6 +126,7 @@
 		initPopovers();
 		initTooltips();
 		toggleDarkMode();
+		userData.value = currentUser.customData;
 	});
 
 	const toggleDarkMode = () => {

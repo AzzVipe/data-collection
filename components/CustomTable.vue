@@ -283,7 +283,7 @@
 
 	const addRow = async () => {
 		let jsonObj = {};
-		jsonObj["user_id"] = realmApp.currentUser.id;
+		jsonObj["user_id"] = currentUser.id;
 		jsonObj["created_at"] = new Date();
 
 		columns.forEach((element) => {
