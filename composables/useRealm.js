@@ -13,13 +13,14 @@ export const useMyRealmApp = () => {
 	async function graphqlOperation(graphql) {
 		let resData = null;
 		const appId = useRuntimeConfig().public.APP_ID;
+		const graphqlAPI = `https://eu-west-1.aws.realm.mongodb.com/api/client/v2.0/app/${appId}/graphql`;
 
 		const temp = Realm.getApp(appId);
 
 		let requestOptions = {
 			method: "post",
 			maxBodyLength: Infinity,
-			url: "https://eu-west-1.aws.realm.mongodb.com/api/client/v2.0/app/application-0-ksuyw/graphql",
+			url: graphqlAPI,
 			headers: {
 				Authorization: `Bearer ${currentUser._accessToken}`,
 				"Content-Type": "application/json",
