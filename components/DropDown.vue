@@ -77,7 +77,7 @@
 </template>
 
 <script setup>
-	import { initDropdowns, Dropdown } from "flowbite";
+	import { Dropdown } from "flowbite";
 	import optData from "@/options.json";
 
 	const emit = defineEmits(["dropdownEdit"]);
@@ -121,18 +121,8 @@
 			offsetSkidding: 0,
 			offsetDistance: 10,
 			delay: 300,
-			onHide: () => {
-				console.log("dropdown has been hidden");
-			},
-			onShow: () => {
-				console.log("dropdown has been shown");
-			},
-			onToggle: () => {
-				console.log("dropdown has been toggled");
-			},
 		};
 		dropdown.value = new Dropdown($targetEl, $triggerEl, options);
-		// initDropdowns();
 		optValue.value = value;
 	});
 </script>

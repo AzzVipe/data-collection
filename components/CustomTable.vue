@@ -1,8 +1,9 @@
 <template>
 	<div class="flex flex-col justify-start p-4 gap-4">
-		<div class="overflow-x-auto rounded-lg" v-if="tableData.length !== 0">
-			<table
-				class="w-full text-sm text-left text-gray-500 dark:text-gray-400 shadow-md">
+		<div
+			class="overflow-x-auto rounded-lg shadow-md"
+			v-if="tableData.length !== 0">
+			<table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
 				<thead
 					class="text-sm font-bold text-gray-700 uppercase bg-slate-200 dark:bg-gray-700 dark:text-gray-200 tracking-wider">
 					<tr>
@@ -108,11 +109,27 @@
 									v-if="col.type === 'dropdown'"
 									:field="col.field"
 									:value="data[col.field]" />
-								<input
+
+								<div
 									v-else-if="col.type === 'string' && col.field !== 'comments'"
-									type="text"
-									class="dark:bg-slate-400 bg-slate-300 max-w-[120px] text-slate-900 overflow-x-scroll px-4 py-2.5 rounded-lg"
-									v-model="data[col.field]" />
+									class="relative">
+									<input
+										type="text"
+										inputmode="numeric"
+										class="dark:bg-slate-400 bg-slate-300 w-full block text-slate-900 overflow-x-scroll px-4 py-2.5 rounded-lg"
+										:class="{
+											'dark:!text-red-800 !text-red-600': isNaN(
+												data[col.field]
+											),
+										}"
+										v-model="data[col.field]" />
+									<p
+										class="absolute text-white font-medium z-50 dark:bg-red-600 bg-red-500 py-1.5 px-2 left-1 -top-10 rounded"
+										v-if="isNaN(data[col.field])">
+										Invalid
+									</p>
+								</div>
+
 								<input
 									v-else
 									type="text"
@@ -314,8 +331,17 @@
 			emit("reRender");
 			return;
 		}
+		if (
+			(data["hours_next_3_months"] && isNaN(data["hours_next_3_months"])) ||
+			(data["hours_last_3_months"] && isNaN(data["hours_last_3_months"]))
+		) {
+			console.log("This should be a number");
+			// cancelRowEdit(data);
+			// emit("reRender");
+			return;
+		}
 		let jsonObj = {};
-		columns.forEach((element) => {
+		await columns.forEach((element) => {
 			jsonObj[element.field] = data[element.field];
 		});
 		jsonObj["user_id"] = data.user_id;

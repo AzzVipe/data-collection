@@ -1,7 +1,6 @@
 <template>
 	<div>
 		<NavBar @sign-out="signOut" />
-		<SideBar />
 		<div
 			class="min-[2000]:ml-56 mt-14 container-height bg-gray-50 dark:bg-gradient2">
 			<NuxtPage />
