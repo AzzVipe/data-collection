@@ -38,13 +38,6 @@
 						>{{ new Date(submittedAt).toUTCString() }}</span
 					>
 				</h1>
-				<button
-					v-if="!submitted && isTableEmpty() !== false"
-					data-modal-target="submitModal"
-					data-modal-toggle="submitModal"
-					class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-					Submit
-				</button>
 
 				<div
 					v-if="!submitted && isTableEmpty() !== false"
@@ -172,6 +165,20 @@
 					@updated-data="updatedCallback"
 					:config="graphqlConfig3"
 					@re-render="reRender" />
+			</div>
+			<div v-if="!isFetching" class="p-4 self-center">
+				<button
+					v-if="!submitted && isTableEmpty() === false"
+					class="text-white bg-gradient-to-r from-green-600/80 via-green-700/80 to-green-800/70 font-semibold rounded-lg text-2xl px-5 py-2.5 text-center cursor-not-allowed">
+					Submit
+				</button>
+				<button
+					v-if="!submitted && isTableEmpty() !== false"
+					data-modal-target="submitModal"
+					data-modal-toggle="submitModal"
+					class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-semibold rounded-lg text-2xl px-5 py-2.5 text-center">
+					Submit
+				</button>
 			</div>
 		</div>
 	</div>
