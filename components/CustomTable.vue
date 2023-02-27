@@ -410,9 +410,7 @@
 	    }`,
 			variables: {},
 		});
-		await graphqlOperation(graphql).then((data) => {
-			console.log(data);
-		});
+		await graphqlOperation(graphql);
 
 		let index;
 
@@ -420,13 +418,10 @@
 			if (tableData[index]._id === id) break;
 		}
 
-		console.log(tableData);
-
 		if (index <= tableData.length) {
 			if (tableData.length > 1) tableData.splice(index, 1);
 			else tableData.pop();
 		}
-		console.log(tableData);
 	};
 </script>
 

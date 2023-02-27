@@ -38,64 +38,6 @@
 						>{{ new Date(submittedAt).toUTCString() }}</span
 					>
 				</h1>
-
-				<div
-					v-if="!submitted && isTableEmpty() !== false"
-					id="submitModal"
-					data-modal-backdrop="static"
-					tabindex="-1"
-					aria-hidden="true"
-					class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
-					<div class="relative w-full h-full max-w-2xl md:h-auto">
-						<div
-							class="relative bg-white rounded-lg shadow-md dark:bg-gray-700">
-							<div
-								class="flex items-start justify-between p-6 border-b rounded-t dark:border-gray-600">
-								<h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-									Are you sure, you want to submit ?
-								</h3>
-								<button
-									type="button"
-									class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-									data-modal-hide="submitModal">
-									<svg
-										class="w-5 h-5"
-										fill="currentColor"
-										viewBox="0 0 20 20"
-										xmlns="http://www.w3.org/2000/svg">
-										<path
-											fill-rule="evenodd"
-											d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-											clip-rule="evenodd"></path>
-									</svg>
-								</button>
-							</div>
-							<div class="p-6 space-y-6">
-								<p
-									class="text-base leading-relaxed text-gray-500 dark:text-gray-300">
-									You won't be able to change the records once you submit it. We
-									request you to check all the records before submitting.
-								</p>
-							</div>
-							<div
-								class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-								<button
-									@click="submitTable"
-									data-modal-hide="submitModal"
-									type="button"
-									class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-									Yes, submit
-								</button>
-								<button
-									data-modal-hide="submitModal"
-									type="button"
-									class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-900 dark:focus:ring-gray-600">
-									Don't submit
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
 			</div>
 			<div v-if="!isFetching">
 				<div
@@ -168,24 +110,84 @@
 			</div>
 			<div v-if="!isFetching" class="p-4 self-center">
 				<button
-					v-if="!submitted && isTableEmpty() === false"
-					class="text-white bg-gradient-to-r from-green-600/80 via-green-700/80 to-green-800/70 font-semibold rounded-lg text-2xl px-5 py-2.5 text-center cursor-not-allowed">
+					type="button"
+					v-if="!submitted && isTableNotEmpty() === false"
+					data-modal-target="submitModal"
+					data-modal-toggle="submitModal"
+					disabled
+					class="text-white bg-gradient-to-r from-green-600/80 via-green-700/80 to-green-800/70 font-semibold rounded-lg text-2xl px-5 py-2.5 text-center !cursor-not-allowed">
 					Submit
 				</button>
 				<button
-					v-if="!submitted && isTableEmpty() !== false"
 					data-modal-target="submitModal"
 					data-modal-toggle="submitModal"
+					@click="submitModal.show()"
+					v-if="!submitted && isTableNotEmpty() !== false"
 					class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-semibold rounded-lg text-2xl px-5 py-2.5 text-center">
 					Submit
 				</button>
+				<div
+					id="submitModal"
+					tabindex="-1"
+					aria-hidden="true"
+					class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+					<div class="relative w-full h-full max-w-2xl md:h-auto">
+						<div
+							class="relative bg-white rounded-lg shadow-md dark:bg-gray-700">
+							<div
+								class="flex items-start justify-between p-6 border-b rounded-t dark:border-gray-600">
+								<h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+									Are you sure, you want to submit ?
+								</h3>
+								<button
+									type="button"
+									class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+									data-modal-hide="submitModal">
+									<svg
+										class="w-5 h-5"
+										fill="currentColor"
+										viewBox="0 0 20 20"
+										xmlns="http://www.w3.org/2000/svg">
+										<path
+											fill-rule="evenodd"
+											d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+											clip-rule="evenodd"></path>
+									</svg>
+								</button>
+							</div>
+							<div class="p-6 space-y-6">
+								<p
+									class="text-base leading-relaxed text-gray-500 dark:text-gray-300">
+									You won't be able to change the records once you submit it. We
+									request you to check all the records before submitting.
+								</p>
+							</div>
+							<div
+								class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+								<button
+									@click="submitTable"
+									data-modal-hide="submitModal"
+									type="button"
+									class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+									Yes, submit
+								</button>
+								<button
+									data-modal-hide="submitModal"
+									type="button"
+									class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-900 dark:focus:ring-gray-600">
+									Don't submit
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script setup>
-	import { initDropdowns } from "flowbite";
+	import { initDropdowns, Modal } from "flowbite";
 
 	const componentKey = ref(1);
 	const totalHourLevel1last = ref(0);
@@ -201,6 +203,7 @@
 	const submitted = ref(false);
 	const submittedAt = ref(null);
 	const isFetching = ref(true);
+	const submitModal = ref();
 
 	const {
 		fetchlevel1,
@@ -294,7 +297,7 @@
 		reRender();
 	};
 
-	const isTableEmpty = () => {
+	const isTableNotEmpty = () => {
 		if (level1.value === null || level2.value === null || level3.value === null)
 			return false;
 		if (
@@ -320,12 +323,13 @@
 				if (level3.value[i][level3Config.value[j].field] === " ") return false;
 			}
 		}
+		createModal();
 
 		return true;
 	};
 
 	const submitTable = async () => {
-		if (isTableEmpty() === false) {
+		if (isTableNotEmpty() === false) {
 			console.log("can't submit empty data");
 			return;
 		}
@@ -363,6 +367,16 @@
 
 	const reRender = () => {
 		componentKey.value++;
+	};
+
+	const createModal = () => {
+		const $targetEl = document.getElementById("submitModal");
+		const options = {
+			placement: "bottom-right",
+			backdrop: "static",
+			closable: true,
+		};
+		submitModal.value = new Modal($targetEl, options);
 	};
 
 	onMounted(() => {
