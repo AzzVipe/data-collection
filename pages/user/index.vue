@@ -74,14 +74,6 @@
 				<div
 					class="flex p-4 items-start justify-between gap-2 text-black dark:text-white flex-col md:flex-row">
 					<h1 class="text-2xl font-bold uppercase">New / Planned Stage</h1>
-					<div class="xl:flex gap-4 uppercase font-semibold dark:text-gray-300">
-						<p>
-							Total hours next 3 Months:
-							<span class="dark:text-white text-gray-500"
-								>{{ totalHourLevel2next }} Hours</span
-							>
-						</p>
-					</div>
 				</div>
 				<CustomTable
 					v-if="level2 !== null"
@@ -262,7 +254,7 @@
 			level2.value = data.level2s;
 
 			level2.value.forEach((data) => {
-				totalHourLevel2next.value += new Number(data.hours_next_3_months);
+				totalHourLevel1next.value += new Number(data.hours_next_3_months);
 			});
 		});
 
@@ -291,7 +283,7 @@
 		});
 		totalHourLevel2next.value = 0;
 		level2.value.forEach((data) => {
-			totalHourLevel2next.value += new Number(data.hours_next_3_months);
+			totalHourLevel1next.value += new Number(data.hours_next_3_months);
 		});
 		calculateLastUpdatedAt(newData);
 		reRender();

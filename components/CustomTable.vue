@@ -107,6 +107,7 @@
 								<DropDown
 									@dropdown-edit="dropEdit($event, index, col.field)"
 									v-if="col.type === 'dropdown'"
+									:tableName="config.tableName"
 									:field="col.field"
 									:value="data[col.field]" />
 
