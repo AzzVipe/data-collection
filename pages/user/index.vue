@@ -22,7 +22,7 @@
 				class="flex justify-between p-4 items-start gap-2 flex-col sm:flex-row sm:items-center">
 				<h1
 					v-if="submitted === false"
-					class="font-bold text-black dark:text-gray-300 uppercase">
+					class="font-bold text-black dark:text-gray-300">
 					Last Changed at:
 					<span
 						v-if="lastUpdatedAt !== null"
@@ -30,7 +30,7 @@
 						>{{ new Date(lastUpdatedAt).toUTCString() }}</span
 					>
 				</h1>
-				<h1 v-else class="font-bold text-black dark:text-gray-300 uppercase">
+				<h1 v-else class="font-bold text-black dark:text-gray-300">
 					Submitted at:
 					<span
 						v-if="submittedAt !== null"
@@ -44,16 +44,16 @@
 					class="flex p-4 items-start justify-between gap-2 text-black dark:text-white flex-col md:flex-row">
 					<h1 class="text-2xl font-bold uppercase">Past / Continuing Stage</h1>
 					<div
-						class="flex uppercase xl:gap-2 font-bold md:items-end dark:text-gray-300 flex-col xl:flex-row">
-						<p>
+						class="flex xl:gap-2 font-bold md:items-end dark:text-gray-300 flex-col xl:flex-row">
+						<p class="capitalize">
 							Total hours last 3 Months:
-							<span class="dark:text-white text-gray-500 font-semibold ml-auto"
+							<span class="dark:text-white text-gray-500 ml-auto"
 								>{{ totalHourLevel1last }} Hours</span
 							>
 						</p>
-						<p>
+						<p class="capitalize">
 							Total hours next 3 Months:
-							<span class="dark:text-white text-gray-500 font-semibold"
+							<span class="dark:text-white text-gray-500"
 								>{{ totalHourLevel1next }} Hours</span
 							>
 						</p>
@@ -272,6 +272,7 @@
 		} else submitted.value = false;
 		// console.log(level3.value, level3Config.value);
 		isFetching.value = false;
+		console.log(level1.value);
 	});
 
 	const updatedCallback = (newData) => {
@@ -300,19 +301,31 @@
 			return false;
 		for (let i = 0; i < level1.value.length; i++) {
 			for (let j = 0; j < level1Config.value.length; j++) {
-				if (level1.value[i][level1Config.value[j].field] === " ") return false;
+				if (
+					level1.value[i][level1Config.value[j].field] === " " ||
+					level1.value[i][level1Config.value[j].field] === null
+				)
+					return false;
 			}
 		}
 
 		for (let i = 0; i < level2.value.length; i++) {
 			for (let j = 0; j < level2Config.value.length; j++) {
-				if (level2.value[i][level2Config.value[j].field] === " ") return false;
+				if (
+					level2.value[i][level2Config.value[j].field] === " " ||
+					level2.value[i][level2Config.value[j].field] === null
+				)
+					return false;
 			}
 		}
 
 		for (let i = 0; i < level3.value.length; i++) {
 			for (let j = 0; j < level3Config.value.length; j++) {
-				if (level3.value[i][level3Config.value[j].field] === " ") return false;
+				if (
+					level3.value[i][level3Config.value[j].field] === " " ||
+					level3.value[i][level3Config.value[j].field] === null
+				)
+					return false;
 			}
 		}
 		createModal();
@@ -334,7 +347,6 @@
 	const calculateLastUpdatedAt = (newData) => {
 		if (newData) {
 			lastUpdatedAt.value = newData.updated_at;
-			console.log(newData.updated_at, lastUpdatedAt.value);
 			return;
 		}
 		level1.value.forEach((data) => {

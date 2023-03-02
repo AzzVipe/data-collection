@@ -22,7 +22,7 @@
 									:data-modal-toggle="`table-head-modal-${col.header}`" />
 							</p>
 							<p
-								v-else-if="col.type === 'string' && col.field !== 'comments'"
+								v-else-if="col.type === 'number'"
 								class="max-w-[120px] inline-flex gap-2">
 								<span>{{ col.header }}</span>
 								<i
@@ -49,7 +49,7 @@
 										<div
 											class="flex items-start justify-between p-6 border-b rounded-t dark:border-gray-600">
 											<h3
-												class="text-xl font-semibold text-gray-900 dark:text-white">
+												class="text-xl font-bold text-gray-900 dark:text-white">
 												{{ col.header }}
 											</h3>
 											<button
@@ -71,7 +71,7 @@
 										<!-- Modal body -->
 										<div class="p-6 space-y-6">
 											<p
-												class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+												class="text-base normal-case text-gray-500 dark:text-gray-300">
 												{{ col.description }}
 											</p>
 										</div>
@@ -82,7 +82,7 @@
 												:data-modal-hide="`table-head-modal-${col.header}`"
 												type="button"
 												class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-												I understand
+												Got it
 											</button>
 										</div>
 									</div>
@@ -111,9 +111,7 @@
 									:field="col.field"
 									:value="data[col.field]" />
 
-								<div
-									v-else-if="col.type === 'string' && col.field !== 'comments'"
-									class="relative">
+								<div v-else-if="col.type === 'number'" class="relative">
 									<input
 										type="text"
 										inputmode="numeric"
@@ -134,7 +132,7 @@
 								<input
 									v-else
 									type="text"
-									class="dark:bg-slate-400 bg-slate-300 text-slate-900 max-w-[200px] px-4 py-2.5 rounded-lg"
+									class="dark:bg-slate-400 bg-slate-300 text-slate-900 w-full px-4 py-2.5 rounded-lg"
 									v-model="data[col.field]" />
 							</div>
 							<!-- <div class="h-20"></div> -->
@@ -326,7 +324,7 @@
 
 	const updateRow = async (data) => {
 		if (isDocSame(data)) {
-			console.log("not updated");
+			console.log("not updated", data);
 			currentItem.value = 0;
 			tableDocCopy.value = null;
 			emit("reRender");

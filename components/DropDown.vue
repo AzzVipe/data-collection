@@ -80,7 +80,7 @@
 	options.value = optData.options;
 
 	watch(optValue, (newVal, oldVal) => {
-		if (oldVal !== null && oldVal != newVal) emit("dropdownEdit", newVal);
+		if (oldVal !== newVal) emit("dropdownEdit", newVal);
 	});
 
 	onBeforeMount(() => {

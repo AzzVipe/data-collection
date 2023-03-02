@@ -108,6 +108,7 @@ export const useMyRealmApp = () => {
 					_id
 					comments
 					customer
+					billable
 					hours_next_3_months
 					impact
 					my_capability
@@ -138,6 +139,7 @@ export const useMyRealmApp = () => {
 					_id
 					comments
 					customer
+					billable
 					hours_last_3_months
 					hours_next_3_months
 					impact
