@@ -21,9 +21,16 @@
 									:data-modal-target="`table-head-modal-${col.header}`"
 									:data-modal-toggle="`table-head-modal-${col.header}`" />
 							</p>
+							<p v-else-if="col.type === 'number'" class="inline-flex gap-2">
+								<span>{{ col.header }}</span>
+								<i
+									class="ri-question-fill"
+									:data-modal-target="`table-head-modal-${col.header}`"
+									:data-modal-toggle="`table-head-modal-${col.header}`" />
+							</p>
 							<p
-								v-else-if="col.type === 'number'"
-								class="max-w-[120px] inline-flex gap-2">
+								v-else-if="col.type === 'string' && col.field === 'service'"
+								class="max-w-[220px] w-[160px] inline-flex gap-2">
 								<span>{{ col.header }}</span>
 								<i
 									class="ri-question-fill"
@@ -100,7 +107,7 @@
 						<td v-for="col in columns" :key="col.id" class="p-2">
 							<p
 								v-if="!isCurrentItem(data._id) || toggle === false"
-								class="px-2 py-2 h-20 leading-6 overflow-y-hidden">
+								class="px-2 py-2 leading-6 overflow-y-hidden">
 								{{ data[col.field] }}
 							</p>
 							<div v-else>
@@ -266,7 +273,7 @@
 	const currentItem = ref(null);
 	const { app: realmApp, currentUser, graphqlOperation } = useMyRealmApp();
 
-	const emit = defineEmits(["reRender", "updatedData"]);
+	const emit = defineEmits(["reRender", "updatedData", "deleted"]);
 	toRefs(tableData);
 
 	onMounted(async () => {
@@ -421,6 +428,8 @@
 			if (tableData.length > 1) tableData.splice(index, 1);
 			else tableData.pop();
 		}
+
+		emit("deleted");
 	};
 </script>
 

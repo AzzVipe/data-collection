@@ -68,6 +68,7 @@
 					:tableData="level1"
 					:submitted="submitted"
 					@updated-data="updatedCallback"
+					@deleted="deletedCallback"
 					@re-render="reRender" />
 			</div>
 			<div v-if="!isFetching">
@@ -83,6 +84,7 @@
 					:config="graphqlConfig2"
 					:submitted="submitted"
 					@updated-data="updatedCallback"
+					@deleted="deletedCallback"
 					@re-render="reRender" />
 			</div>
 
@@ -97,6 +99,7 @@
 					:key="componentKey"
 					:submitted="submitted"
 					@updated-data="updatedCallback"
+					@deleted="deletedCallback"
 					:config="graphqlConfig3"
 					@re-render="reRender" />
 			</div>
@@ -287,6 +290,22 @@
 			totalHourLevel1next.value += new Number(data.hours_next_3_months);
 		});
 		calculateLastUpdatedAt(newData);
+		reRender();
+	};
+
+	const deletedCallback = () => {
+		totalHourLevel1last.value = 0;
+		totalHourLevel1next.value = 0;
+		level1.value.forEach((data) => {
+			totalHourLevel1last.value += new Number(data.hours_last_3_months);
+			totalHourLevel1next.value += new Number(data.hours_next_3_months);
+		});
+		totalHourLevel2next.value = 0;
+		level2.value.forEach((data) => {
+			totalHourLevel1next.value += new Number(data.hours_next_3_months);
+		});
+		lastUpdatedAt.value = null;
+		calculateLastUpdatedAt();
 		reRender();
 	};
 
