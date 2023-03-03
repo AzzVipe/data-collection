@@ -5,7 +5,7 @@
 			v-if="tableData.length !== 0">
 			<table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
 				<thead
-					class="text-sm font-bold text-gray-700 uppercase bg-slate-200 dark:bg-gray-700 dark:text-gray-200 tracking-wider">
+					class="text-sm font-bold text-gray-700 bg-slate-200 dark:bg-gray-700 dark:text-gray-200 tracking-wider">
 					<tr>
 						<th
 							v-for="col in columns"

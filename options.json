@@ -12,16 +12,24 @@
 			"field": "customer",
 			"option": [
 				{
-					"name": "My manager",
-					"description": "The customer who benefits from this service is your manager."
+					"name": "External customer",
+					"description": "Your customer for this work is a customer of the company."
 				},
 				{
-					"name": "My self",
-					"description": "Your primary customer of this service is yourself"
+					"name": "Company",
+					"description": "Your customer for this work is the whole company (or at least a number of groups within the company)."
+				},
+				{
+					"name": "General employees",
+					"description": "Your customer for this are employees."
+				},
+				{
+					"name": "My manager",
+					"description": "The customer who benefits from this work is your manager."
 				},
 				{
 					"name": "My team",
-					"description": "Your customer benefiting from service is your team."
+					"description": "Your customer benefiting from work is your team."
 				},
 				{ "name": "Peers", "description": "Your customer is a peer." },
 				{
@@ -29,36 +37,24 @@
 					"description": "Your customer is leaders across the company"
 				},
 				{
-					"name": "Executive Staff",
-					"description": "Your customer for this service is the executive staff (direct reports to CEO)"
+					"name": "Executive staff",
+					"description": "Your customer for this work is the executive staff (direct reports to CEO)"
 				},
 				{
-					"name": "Functional Group",
-					"description": "Your customer for is a functional group that requires the service."
+					"name": "Functional group",
+					"description": "Your customer for is a functional group that requires the work."
 				},
 				{
-					"name": "3rd Party",
+					"name": "3rd party",
 					"description": "Your customer is a third party partner."
 				},
 				{
-					"name": "Company",
-					"description": "Your customer for this service is the whole company (or at least a number of groups within the company)."
-				},
-				{
-					"name": "General Employees",
-					"description": "Your customer for this are employees."
-				},
-				{
-					"name": "External Customer",
-					"description": "Your customer for this service is a customer of the company."
-				},
-				{
-					"name": "Partner",
-					"description": "Your customer is a third party partner."
+					"name": "My self",
+					"description": "Your primary customer of this work is yourself"
 				},
 				{
 					"name": "Other",
-					"description": "Your customer for this service is someone other than the options provided."
+					"description": "Your customer for this work is someone other than the options provided."
 				}
 			]
 		},
@@ -70,7 +66,7 @@
 			"field": "impact",
 			"option": [
 				{
-					"name": "Revenue Gen",
+					"name": "Revenue generation",
 					"description": "Directly impacts revenue generation"
 				},
 				{
@@ -78,15 +74,15 @@
 					"description": "Directly impacts the profit of the company (saves cost, reduces waste, streamlines, makes org more efficient)"
 				},
 				{
-					"name": "Customer Sat",
+					"name": "Customer satisfaction",
 					"description": "Directly impacts customer satisfaction"
 				},
 				{
-					"name": "Employee Sat",
+					"name": "Employee satisfaction",
 					"description": "Directly impacts employee satisfaction"
 				},
 				{
-					"name": "Risk Management",
+					"name": "Risk management",
 					"description": "Directly impacts risk reduction for the company"
 				},
 				{ "name": "Other", "description": "Other impact" }
@@ -97,11 +93,11 @@
 			"option": [
 				{
 					"name": "Core",
-					"description": "Requires a basic to modest level of training and/or experience to adequately deliver service"
+					"description": "Requires a basic to modest level of training and/or experience to adequately deliver work"
 				},
 				{
 					"name": "Skilled",
-					"description": "Requires skilled problem-solving based on years of relevant knowledge or experience to adequately deliver service"
+					"description": "Requires skilled problem-solving based on years of relevant knowledge or experience to adequately deliver work"
 				},
 				{
 					"name": "Expert",
@@ -113,32 +109,32 @@
 			"field": "service_quality",
 			"option": [
 				{
-					"name": "The service is working well",
-					"description": "This service does not need improving"
+					"name": "The work is working well",
+					"description": "This work does not need improving"
 				},
 				{
-					"name": "The service needs improving",
-					"description": "This service does need improving"
+					"name": "The work needs improving",
+					"description": "This work does need improving"
 				},
 				{
-					"name": "Environmental / team dynamics impacting service effectiveness",
-					"description": "There is something going on in the environment or within the team that is having a negative impact on the quality/effectiveness of the service (e.g. toxic environment, exclusion/lack of belonging, poor leadership....)"
+					"name": "Environmental / team dynamics impacting work effectiveness",
+					"description": "There is something going on in the environment or within the team that is having a negative impact on the quality/effectiveness of the work (e.g. toxic environment, exclusion/lack of belonging, poor leadership....)"
 				},
 				{
 					"name": "Improvement is in process",
-					"description": "A project is underway to improve this service"
+					"description": "A project is underway to improve this work"
 				},
 				{
-					"name": "I want to lead improving this service",
-					"description": "I want to lead or participate in improving this service"
+					"name": "I want to lead improving this work",
+					"description": "I want to lead or participate in improving this work"
 				},
 				{
-					"name": "This service could be automated / autsourced",
-					"description": "Some or all of this service could be automated/outsourced"
+					"name": "Work could be automated / autsourced",
+					"description": "Some or all of this work could be automated/outsourced"
 				},
 				{
-					"name": "Service not needed / not adding value",
-					"description": "This service is not needed; can be eliminated"
+					"name": "Work not needed / not adding value",
+					"description": "This work is not needed; can be eliminated"
 				}
 			]
 		},
@@ -147,23 +143,23 @@
 			"option": [
 				{
 					"name": "I am fully capable and confident",
-					"description": "I am confident and capable in performing this service"
+					"description": "I am confident and capable in performing this work"
 				},
 				{
-					"name": "This service offers me an opportunity to grow",
-					"description": "I am learning and growing from this service"
+					"name": "This work offers me an opportunity to grow",
+					"description": "I am learning and growing from this work"
 				},
 				{
 					"name": "This is a stretch for me; need additional support",
-					"description": "I want to improve my ability to perform this service and need additional support"
+					"description": "I want to improve my ability to perform this work and need additional support"
 				},
 				{
-					"name": "My talent is NOT aligned with this service",
-					"description": "My skills or strengths aren't aligned to perform this service"
+					"name": "My talent is NOT aligned with this work",
+					"description": "My skills or strengths aren't aligned to perform this work"
 				},
 				{
 					"name": "There is another person I know, which is better suited",
-					"description": "I may or not be capable of doing this service, but there is someone who would be better (either because they really want to do it or just have the talent)"
+					"description": "I may or not be capable of doing this work, but there is someone who would be better (either because they really want to do it or just have the talent)"
 				}
 			]
 		},
@@ -171,28 +167,28 @@
 			"field": "my_interest",
 			"option": [
 				{
-					"name": "Enjoy this service; would like to keep doing it",
-					"description": "I enjoy this service; would like to keep doing it"
+					"name": "Enjoy this work; would like to keep doing it",
+					"description": "I enjoy this work; would like to keep doing it"
 				},
 				{
-					"name": "Enjoy this service; would like to do more of it",
-					"description": "I enjoy this service; would like to do more of it"
+					"name": "Enjoy this work; would like to do more of it",
+					"description": "I enjoy this work; would like to do more of it"
 				},
 				{
-					"name": "Dislike this service; would prefer not to do it",
-					"description": "Dislike this service; would prefer not to do it"
+					"name": "Dislike this work; would prefer not to do it",
+					"description": "Dislike this work; would prefer not to do it"
 				},
 				{
 					"name": "Been there done that; I am not learning or growing",
 					"description": "Been there done that; I am not learning or growing"
 				},
 				{
-					"name": "Would like to train / mentor others to do this service",
-					"description": "I would like to train/mentor others to do this service"
+					"name": "Would like to train / mentor others to do this work",
+					"description": "I would like to train/mentor others to do this work"
 				},
 				{
 					"name": "Specific project that is completed / no longer needed",
-					"description": "This was work or a service that no longer needs to be done; only needed to be completed once"
+					"description": "This was work or a task that no longer needs to be done; only needed to be completed once"
 				},
 				{
 					"name": "Not doing this, but would like to in the future",
