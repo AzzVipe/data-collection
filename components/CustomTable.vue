@@ -1,9 +1,8 @@
 <template>
 	<div class="flex flex-col justify-start p-4 gap-4">
-		<div
-			class="overflow-x-auto rounded-lg shadow-md"
-			v-if="tableData.length !== 0">
-			<table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+		<div class="rounded-lg overflow-x-auto" v-if="tableData.length !== 0">
+			<table
+				class="w-full rounded text-sm text-left text-gray-500 dark:text-gray-400">
 				<thead
 					class="text-sm font-bold text-gray-700 bg-slate-200 dark:bg-gray-700 dark:text-gray-200 tracking-wider">
 					<tr>
@@ -119,21 +118,21 @@
 									:value="data[col.field]" />
 
 								<div v-else-if="col.type === 'number'" class="relative">
+									<p
+										class="absolute w-fit text-white font-medium dark:bg-red-600 bg-red-500 py-1.5 px-2 left-1 -top-3 rounded -translate-y-full z-50"
+										v-if="!isValidHour(data[col.field])">
+										Valid numbers (16 - 100)
+									</p>
 									<input
 										type="text"
 										inputmode="numeric"
-										class="dark:bg-slate-400 bg-slate-300 w-full block text-slate-900 overflow-x-scroll px-4 py-2.5 rounded-lg"
+										class="dark:bg-slate-400 overflow-x-scroll bg-slate-300 w-full block text-slate-900 px-4 py-2.5 rounded-lg"
 										:class="{
 											'dark:!text-red-800 !text-red-600': isNaN(
 												data[col.field]
 											),
 										}"
 										v-model="data[col.field]" />
-									<p
-										class="absolute text-white font-medium z-50 dark:bg-red-600 bg-red-500 py-1.5 px-2 left-1 -top-10 rounded"
-										v-if="isNaN(data[col.field])">
-										Invalid
-									</p>
 								</div>
 
 								<input
@@ -146,23 +145,21 @@
 						</td>
 						<td class="px-6 py-4 text-right flex gap-4" v-if="!submitted">
 							<button
+								:id="data._id"
 								v-if="isCurrentItem(data._id)"
 								@click="updateRow(data)"
-								href="#"
 								class="text-2xl text-green-600 dark:text-green-500 hover:underline">
 								<i class="ri-checkbox-circle-fill"></i>
 							</button>
 							<button
 								v-if="isCurrentItem(data._id)"
 								@click="cancelRowEdit(data)"
-								href="#"
 								class="text-2xl text-gray-600 dark:text-gray-500 hover:underline">
 								<i class="ri-close-circle-fill"></i>
 							</button>
 							<button
 								v-else
 								@click="setCurrentItem(data)"
-								href="#"
 								class="text-2xl text-blue-700 dark:text-blue-500 hover:underline">
 								<i class="ri-pencil-fill"></i>
 							</button>
@@ -171,7 +168,6 @@
 								:data-modal-toggle="`popup-modal-${index}-${config.tableName}`"
 								type="button"
 								v-if="!isCurrentItem(data._id)"
-								href="#"
 								class="text-2xl text-red-600 dark:text-red-500 hover:underline">
 								<i class="ri-delete-bin-5-fill"></i>
 							</button>
@@ -269,7 +265,7 @@
 		"columns",
 	]);
 	const toggle = ref(false);
-	const tableDocCopy = ref();
+	const tableDocCopy = ref(null);
 	const currentItem = ref(null);
 	const { app: realmApp, currentUser, graphqlOperation } = useMyRealmApp();
 
@@ -279,6 +275,16 @@
 	onMounted(async () => {
 		initModals();
 	});
+
+	const isValidHour = (hours) => {
+		const num = Number(hours);
+		if (isNaN(hours)) return false;
+		if (num <= 16 || num >= 100) {
+			return false;
+		}
+
+		return true;
+	};
 
 	const isCurrentItem = (id) => {
 		toggle.value = true;
@@ -326,7 +332,12 @@
 			jsonObj["_id"] = data[config.insert]._id;
 		});
 		tableData.push(jsonObj);
-		emit("reRender");
+		if (!(currentItem.value === 0 || currentItem.value === null)) {
+			await updateRow(
+				tableData.find((temp) => temp._id === tableDocCopy.value._id)
+			);
+			// console.log(currentItem.value, "ITEM ALREADY SET");
+		} else emit("reRender");
 	};
 
 	const updateRow = async (data) => {
@@ -338,12 +349,13 @@
 			return;
 		}
 		if (
-			(data["hours_next_3_months"] && isNaN(data["hours_next_3_months"])) ||
-			(data["hours_last_3_months"] && isNaN(data["hours_last_3_months"]))
+			(data["hours_next_3_months"] &&
+				!isValidHour(data["hours_next_3_months"])) ||
+			(data["hours_last_3_months"] && !isValidHour(data["hours_last_3_months"]))
 		) {
 			console.log("This should be a number");
-			// cancelRowEdit(data);
-			// emit("reRender");
+			cancelRowEdit(data);
+			emit("reRender");
 			return;
 		}
 		let jsonObj = {};

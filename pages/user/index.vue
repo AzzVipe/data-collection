@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="mt-14 p-4 flex flex-col">
+		<div class="mt-14 md:p-4 p-2 flex flex-col">
 			<div v-if="isFetching" role="status" class="p-4 self-center">
 				<svg
 					aria-hidden="true"
@@ -42,7 +42,7 @@
 			<div v-if="!isFetching">
 				<div
 					class="flex p-4 items-start justify-between gap-2 text-black dark:text-white flex-col md:flex-row">
-					<h1 class="text-2xl font-bold uppercase">Past / Continuing Stage</h1>
+					<h1 class="text-2xl font-bold">Past / Continuing Stage</h1>
 					<div
 						class="flex xl:gap-2 font-bold md:items-end dark:text-gray-300 flex-col xl:flex-row">
 						<p class="capitalize">
@@ -74,7 +74,7 @@
 			<div v-if="!isFetching">
 				<div
 					class="flex p-4 items-start justify-between gap-2 text-black dark:text-white flex-col md:flex-row">
-					<h1 class="text-2xl font-bold uppercase">New / Planned Stage</h1>
+					<h1 class="text-2xl font-bold">New / Planned Stage</h1>
 				</div>
 				<CustomTable
 					v-if="level2 !== null"
@@ -89,7 +89,7 @@
 			</div>
 
 			<div v-if="!isFetching">
-				<h1 class="text-black dark:text-white text-2xl p-4 font-bold uppercase">
+				<h1 class="text-black dark:text-white text-2xl p-4 font-bold">
 					New / Desired Stage
 				</h1>
 				<CustomTable
@@ -320,6 +320,7 @@
 			return false;
 		for (let i = 0; i < level1.value.length; i++) {
 			for (let j = 0; j < level1Config.value.length; j++) {
+				if (level1Config.value[j].field === "comments") continue;
 				if (
 					level1.value[i][level1Config.value[j].field] === " " ||
 					level1.value[i][level1Config.value[j].field] === null
@@ -330,6 +331,7 @@
 
 		for (let i = 0; i < level2.value.length; i++) {
 			for (let j = 0; j < level2Config.value.length; j++) {
+				if (level2Config.value[j].field === "comments") continue;
 				if (
 					level2.value[i][level2Config.value[j].field] === " " ||
 					level2.value[i][level2Config.value[j].field] === null
@@ -340,6 +342,7 @@
 
 		for (let i = 0; i < level3.value.length; i++) {
 			for (let j = 0; j < level3Config.value.length; j++) {
+				if (level3Config.value[j].field === "comments") continue;
 				if (
 					level3.value[i][level3Config.value[j].field] === " " ||
 					level3.value[i][level3Config.value[j].field] === null

@@ -30,4 +30,8 @@
 			rgb(36, 59, 85) 91.1%
 		); */
 	}
+
+	.data-table {
+		@apply !rounded-lg;
+	}
 }

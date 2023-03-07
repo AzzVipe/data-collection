@@ -3,14 +3,12 @@
 		class="fixed shadow dark:shadow-slate-700 top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gradient dark:border-gray-700">
 		<div class="px-3 py-3 lg:px-5 lg:pl-3">
 			<div class="flex items-center justify-between">
-				<div class="flex items-center justify-start">
-					<NuxtLink to="/user" class="flex ml-2 cursor-pointer md:mr-24">
-						<span
-							class="self-center text-medium font-extrabold sm:text-2xl whitespace-nowrap dark:text-white tracking-wider"
-							>HR Data Collection App</span
-						>
-					</NuxtLink>
-				</div>
+				<p
+					@click="navigateTo('/instruction')"
+					class="ml-2 cursor-pointer text-lg font-extrabold md:text-xl lg:text-2xl dark:text-white tracking-wider truncate">
+					{{ APP_NAME }}
+				</p>
+
 				<div class="flex items-center">
 					<div class="flex items-center justify-center ml-3 gap-2 sm:gap-4">
 						<button
@@ -26,27 +24,19 @@
 								class="ri-moon-line hidden text-xl"
 								fill="currentColor"></i>
 						</button>
-						<div>
-							<button
-								v-if="userData !== null"
-								type="button"
-								class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-								aria-expanded="false"
-								data-dropdown-toggle="dropdown-user">
-								<span class="sr-only">Open user menu</span>
-								<img
-									referrerPolicy="no-referrer"
-									class="w-8 h-8 rounded-full"
-									:src="userData.image_url"
-									alt="user photo" />
-								<!-- <div
-									class="w-8 h-8 rounded-full text-white flex justify-center items-center">
-									<p class="font-bold">
-										{{ userData.first_name[0] }} {{ userData.last_name[0] }}
-									</p>
-								</div> -->
-							</button>
-						</div>
+						<button
+							v-if="userData !== null"
+							type="button"
+							class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600 w-8"
+							aria-expanded="false"
+							data-dropdown-toggle="dropdown-user">
+							<span class="sr-only">Open user menu</span>
+							<img
+								referrerPolicy="no-referrer"
+								class="rounded-full"
+								:src="userData.image_url"
+								alt="user photo" />
+						</button>
 						<div
 							v-if="userData !== null"
 							class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
@@ -62,14 +52,6 @@
 								</p>
 							</div>
 							<ul class="py-1" role="none">
-								<li>
-									<NuxtLink
-										to="/user"
-										class="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-										role="menuitem">
-										<p class="text-left">Dashboard</p>
-									</NuxtLink>
-								</li>
 								<li>
 									<button
 										@click="emit('signOut')"
@@ -99,6 +81,7 @@
 	const emit = defineEmits(["signOut"]);
 
 	const { currentUser } = useMyRealmApp();
+	const { APP_NAME } = useRuntimeConfig().public;
 	const userData = ref(null);
 
 	onBeforeMount(() => {

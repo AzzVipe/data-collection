@@ -4,7 +4,7 @@
 			<div class="flex flex-col gap-6 px-6 py-8 mx-auto items-center">
 				<h1
 					class="text-2xl font-extrabold leading-tight tracking-wide text-gray-900 md:text-4xl dark:text-white text-center">
-					Welcome to, HR Data Collection App !
+					Welcome to, {{ APP_NAME }} !
 				</h1>
 				<div
 					class="flex justify-center items-center h-full w-full sm:max-w-md xl:p-0">
@@ -33,8 +33,8 @@
 </template>
 
 <script setup>
-	const errMsg = ref(null);
 	const { app: realmApp, Realm } = useMyRealmApp();
+	const { APP_NAME } = useRuntimeConfig().public;
 
 	const googleLogin = () => {
 		const redirectURI = `${window.location.protocol}//${window.location.host}/callback`;
@@ -47,7 +47,7 @@
 			.logIn(credentials)
 			.then((user) => {
 				console.log(user);
-				navigateTo("/user");
+				navigateTo("/instruction");
 				// loading.value = false;
 			})
 			.catch((err) => console.error(err));

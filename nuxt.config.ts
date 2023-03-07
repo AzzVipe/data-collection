@@ -8,6 +8,7 @@ export default defineNuxtConfig({
 	runtimeConfig: {
 		public: {
 			APP_ID: "application-0-ksuyw",
+			APP_NAME: "Role Alignment & Development Ambition Record (RADAR) 2023",
 		},
 	},
 
@@ -18,7 +19,7 @@ export default defineNuxtConfig({
 			meta: [
 				{ name: "viewport", content: "width=device-width, initial-scale=1" },
 			],
-			title: "Data Collection",
+			title: "RADAR 2023",
 			link: [
 				{
 					href: "https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap",
