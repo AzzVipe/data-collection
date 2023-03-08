@@ -7,8 +7,9 @@ export default defineNuxtConfig({
 
 	runtimeConfig: {
 		public: {
-			APP_ID: "application-0-ksuyw",
-			APP_NAME: "Role Alignment & Development Ambition Record (RADAR) 2023",
+			APP_ID: process.env.VITE_REALM_APP_ID,
+			APP_NAME: process.env.VITE_APP_NAME,
+			INSTRUCTION_VIDEO_URL: process.env.VITE_INSTRUCTION_VIDEO_URL,
 		},
 	},
 
