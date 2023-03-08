@@ -441,7 +441,12 @@
 			else tableData.pop();
 		}
 
-		emit("deleted");
+		if (!(currentItem.value === 0 || currentItem.value === null)) {
+			await updateRow(
+				tableData.find((temp) => temp._id === tableDocCopy.value._id)
+			);
+			// console.log(currentItem.value, "ITEM ALREADY SET");
+		} else emit("deleted");
 	};
 </script>
 

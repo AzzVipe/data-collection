@@ -11,11 +11,10 @@ export const useMyRealmApp = () => {
 	const currentUser = app.currentUser;
 
 	async function graphqlOperation(graphql) {
+		await currentUser.refreshAccessToken();
 		let resData = null;
 		const appId = useRuntimeConfig().public.APP_ID;
 		const graphqlAPI = `https://eu-west-1.aws.realm.mongodb.com/api/client/v2.0/app/${appId}/graphql`;
-
-		const temp = Realm.getApp(appId);
 
 		let requestOptions = {
 			method: "post",
