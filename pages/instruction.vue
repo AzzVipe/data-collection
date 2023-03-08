@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="h-screen p-4 flex justify-center items-center bg-white dark:bg-gray-900">
+		class="min-h-screen p-4 flex justify-center items-center bg-white dark:bg-gray-900">
 		<section class="rounded shadow dark:bg-slate-800">
 			<div class="md:p-8 p-4 mx-auto max-w-screen-xl">
 				<div
